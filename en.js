@@ -1,16 +1,7 @@
-// SVG$BMWAG$r<hF@(B
 var s = Snap("#svg");
-
-// $B1_$N?t$r;XDj(B
 var circleCount = 6;
-
-// $B1_$NH>7B(B
 var radius = 20;
-
-// $B1_$N4V3V(B
 var spacing = 50;
-
-// $B=i4|0LCV(B
 var x = 95;
 var y = 200;
 
@@ -21,9 +12,7 @@ var circles = [];
 var texts = [];
 
 Snap.load("test.svg", function(fragment) {
-  //   $BFI$_9~$s$@(BSVG$B$NFCDj$NMWAG$rA*Br(B
-    var GrmMain = fragment.select("#g846")
- .attr({transform: "scale(1.5,1.5)"});
+    var GrmMain = fragment.select("#g846");
     s.append(GrmMain);
 });
         var circle1= s.circle(220, 350, 100);
@@ -91,7 +80,7 @@ Snap.load("satz.svg", function(fragment) {
 var group0 = s.group(); 
   if(index===0){
 
-var text = s.text(cx, cy+3, "⛌");
+var text = s.text(cx, cy+3, "\u292C");
 text.node.style.userSelect = "none";
 texts.push(text);
 group0.add(circle, text);
@@ -129,7 +118,7 @@ text.node.style.userSelect = "none";
 //+
   if(index===4){
 
-var text = s.text(cx, cy+8, "♎");
+var text = s.text(cx, cy+8, "\u264E");
 text.node.style.userSelect = "none";
 texts.push(text);
  
@@ -152,7 +141,7 @@ texts.push(text);
 //#
   if(index===1){
 
-var text = s.text(cx-1, cy+10, "♈");
+var text = s.text(cx-1, cy+10, "\u2648");
 text.node.style.userSelect = "none"; 
 texts.push(text);
 
@@ -171,10 +160,10 @@ texts.push(text);
  
 }
 
-//o
+//Class
   if(index===5){
 
-var text = s.text(cx, cy+3,"⛤");
+var text = s.text(cx, cy+3,"\u26E4");
 text.node.style.userSelect = "none"; 
 texts.push(text);
 
