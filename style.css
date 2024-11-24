@@ -86,6 +86,9 @@ border-color:green;
 .code{
  width:400px;
  height:200px;
+overflow: scroll;
+overflow-x: hidden;
+scrollbar-color: #00FF00 #008800; 
 }
  
 .mm{
