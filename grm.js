@@ -64,7 +64,7 @@ text.attr({
 Snap.load("satz.svg", function(fragment) {
 
     var GrmMain = fragment.select("#g08")
-.attr({fill:"ffff",
+.attr({fill:"#888",
             stroke:"#F00"
  });
       s.append(GrmMain);
@@ -140,8 +140,8 @@ text.attr({
 Snap.load("satz.svg", function(fragment) {
 
     var GrmMain = fragment.select("#g08")
-.attr({fill:"ffff",
-            stroke:"#880"
+.attr({fill:"#888",
+            stroke:"#FF0"
  });
       s.append(GrmMain);
  });
@@ -177,7 +177,7 @@ text.attr({
 Snap.load("satz.svg", function(fragment) {
 
     var GrmMain = fragment.select("#g08")
-.attr({fill:"ffff",
+.attr({fill:"#888",
             stroke:"#080"
  });
       s.append(GrmMain);
@@ -187,41 +187,52 @@ Snap.load("satz.svg", function(fragment) {
 }
 
 
+
 //Class
- var groupc2 = s.group(); 
+var groupc1 = s.group(); 
+
   if(index===5){
 
 var text = s.text(cx, cy+3,"\u26E4");
-texts.push(text);
-groupc2.add(circle, text);
-
 text.node.style.userSelect = "none"; 
+texts.push(text);
+groupc1.add(circle, text);
+
 
 text.attr({
- fill: "#fff",
-  "font-size": 35,
+ fill: "#000",
+  "font-size": 40,
   "text-anchor": "middle", 
   "dominant-baseline": "middle" 
 });
 
    circle.attr({
-            stroke: "#fff": ,
-            fill: "#080": 
-   });
- groupc2.click(function(){
-
-Snap.load("satz.svg", function(fragment) {
-
-    var GrmMain = fragment.select("#g08")
-.attr({fill:"#080",
-            stroke:"#FFF",
+            stroke: "#FFF",
+            fill: "#0F0",
             strokeWidth: 2
+   });
+
+       groupc1.click(function() {
+            
+Snap.load("satz.svg", function(fragment) {
+ 
+    var GrmMain = fragment.select("#g08")
+.attr({fill:"#888",
+            stroke:"#000"
  });
       s.append(GrmMain);
  });
 });
 
+
+
 }
+
+ 
+
+
+
+
 
 //suuji
 var groups = s.group(); 
@@ -251,7 +262,7 @@ text.attr({
 Snap.load("satz.svg", function(fragment) {
  
     var GrmMain = fragment.select("#g08")
-.attr({fill:"ffff",
+.attr({fill:"#888",
             stroke:"#0FF"
  });
       s.append(GrmMain);
