@@ -1,7 +1,16 @@
+// SVG要素を取得
 var s = Snap("#svg");
+
+// 円の数を指定
 var circleCount = 6;
+
+// 円の半径
 var radius = 20;
+
+// 円の間隔
 var spacing = 50;
+
+// 初期位置
 var x = 95;
 var y = 200;
 
@@ -12,7 +21,9 @@ var circles = [];
 var texts = [];
 
 Snap.load("test.svg", function(fragment) {
+  //   読み込んだSVGの特定の要素を選択
     var GrmMain = fragment.select("#g846");
+
     s.append(GrmMain);
 });
         var circle1= s.circle(220, 350, 100);
@@ -24,7 +35,7 @@ Snap.load("test.svg", function(fragment) {
 
 circle1.click(function() {
 
-// $B1_$r@8@.$7!";~4V:9$GI=<($9$k4X?t(B
+// 円を生成し、時間差で表示する関数
 function createCircle(index) {
 var cx=x + index * spacing;
 var cy= y+(index-2.5) *(index-2.5) * spacing/2.5;
@@ -37,10 +48,10 @@ var cy= y+(index-2.5) *(index-2.5) * spacing/2.5;
  circles.push(circle);
 
 
-// $B%0%k!<%W$KDI2C(B 
+// グループに追加 
 
 
- // $B%0%k!<%WA4BN$KBP$7$F=hM}$r9T$&(B
+ // グループ全体に対して処理を行う
 
 //moji 
 var groupm = s.group(); 
@@ -50,12 +61,12 @@ texts.push(text);
 groupm.add(circle, text);
 
 text.node.style.userSelect = "none"; 
-// $B%F%-%9%H$N%U%)%s%H%5%$%:$rD4@0(B
+// テキストのフォントサイズを調整
 text.attr({
  fill: "#800",
   "font-size": 40,
-  "text-anchor": "middle", // $BJ8;z$rCf1{B7$((B
-  "dominant-baseline": "middle" // $BJ8;z$rCf1{B7$((B
+  "text-anchor": "middle", // 文字を中央揃え
+  "dominant-baseline": "middle" // 文字を中央揃え
 });
 
    circle.attr({
@@ -64,9 +75,9 @@ text.attr({
    });
  groupm.click(function(){
 //       circle.click(function() {
-            // $B30It(BSVG$B$rFI$_9~$`(B
+            // 外部SVGを読み込む
 Snap.load("satz.svg", function(fragment) {
-    // $BFI$_9~$s$@(BSVG$B$NFCDj$NMWAG$rA*Br(B
+    // 読み込んだSVGの特定の要素を選択
     var GrmMain = fragment.select("#g08")
 .attr({fill:"ffff",
             stroke:"#F00"
@@ -76,21 +87,21 @@ Snap.load("satz.svg", function(fragment) {
 });
 
 }
-//$B>C5n(B
+//消去
 var group0 = s.group(); 
   if(index===0){
 
-var text = s.text(cx, cy+3, "?");
+var text = s.text(cx, cy+3, "");
 text.node.style.userSelect = "none";
 texts.push(text);
 group0.add(circle, text);
  
-// $B%F%-%9%H$N%U%)%s%H%5%$%:$rD4@0(B
+// テキストのフォントサイズを調整
  text.attr({
  fill: "#fff",
   "font-size": 30,
-  "text-anchor": "middle", // $BJ8;z$rCf1{B7$((B
-  "dominant-baseline": "middle" // $BJ8;z$rCf1{B7$((B
+  "text-anchor": "middle", // 文字を中央揃え
+  "dominant-baseline": "middle" // 文字を中央揃え
 });
 text.node.style.userSelect = "none"; 
 
@@ -101,7 +112,7 @@ text.node.style.userSelect = "none";
    });
 
  group0.click(function() {
- // $BA4$F$N1_$r:o=|(B
+ // 全ての円を削除
   circles.forEach(function(circle) {
    circle.remove();
    });
@@ -118,16 +129,16 @@ text.node.style.userSelect = "none";
 //+
   if(index===4){
 
-var text = s.text(cx, cy+8, "?");
+var text = s.text(cx, cy+8, "");
 text.node.style.userSelect = "none";
 texts.push(text);
  
-// $B%F%-%9%H$N%U%)%s%H%5%$%:$rD4@0(B
+// テキストのフォントサイズを調整
  text.attr({
  fill: "#880",
   "font-size": 35,
-  "text-anchor": "middle", // $BJ8;z$rCf1{B7$((B
-  "dominant-baseline": "middle" // $BJ8;z$rCf1{B7$((B
+  "text-anchor": "middle", // 文字を中央揃え
+  "dominant-baseline": "middle" // 文字を中央揃え
 });
 
    circle.attr({
@@ -141,16 +152,16 @@ texts.push(text);
 //#
   if(index===1){
 
-var text = s.text(cx-1, cy+10, "?");
+var text = s.text(cx-1, cy+10, "");
 text.node.style.userSelect = "none"; 
 texts.push(text);
 
-// $B%F%-%9%H$N%U%)%s%H%5%$%:$rD4@0(B
+// テキストのフォントサイズを調整
  text.attr({
  fill: "#080",
   "font-size": 35,
-  "text-anchor": "middle", // $BJ8;z$rCf1{B7$((B
-  "dominant-baseline": "middle" // $BJ8;z$rCf1{B7$((B
+  "text-anchor": "middle", // 文字を中央揃え
+  "dominant-baseline": "middle" // 文字を中央揃え
 });
 
    circle.attr({
@@ -163,16 +174,16 @@ texts.push(text);
 //o
   if(index===5){
 
-var text = s.text(cx, cy+3,"?");
+var text = s.text(cx, cy+3,"");
 text.node.style.userSelect = "none"; 
 texts.push(text);
 
-// $B%F%-%9%H$N%U%)%s%H%5%$%:$rD4@0(B
+// テキストのフォントサイズを調整
  text.attr({
  fill: "#fff",
   "font-size": 50,
-  "text-anchor": "middle", // $BJ8;z$rCf1{B7$((B
-  "dominant-baseline": "middle" // $BJ8;z$rCf1{B7$((B
+  "text-anchor": "middle", // 文字を中央揃え
+  "dominant-baseline": "middle" // 文字を中央揃え
 });
 
    circle.attr({
@@ -183,7 +194,7 @@ texts.push(text);
 
 }
 
-//$B?t;z(B
+//数字
 var groups = s.group(); 
 
   if(index===3){
@@ -193,12 +204,12 @@ text.node.style.userSelect = "none";
 texts.push(text);
 groups.add(circle, text);
 
-// $B%F%-%9%H$N%U%)%s%H%5%$%:$rD4@0(B
+// テキストのフォントサイズを調整
 text.attr({
  fill: "#08f",
   "font-size": 40,
-  "text-anchor": "middle", // $BJ8;z$rCf1{B7$((B
-  "dominant-baseline": "middle" // $BJ8;z$rCf1{B7$((B
+  "text-anchor": "middle", // 文字を中央揃え
+  "dominant-baseline": "middle" // 文字を中央揃え
 });
 
    circle.attr({
@@ -207,9 +218,9 @@ text.attr({
    });
 
        groups.click(function() {
-            // $B30It(BSVG$B$rFI$_9~$`(B
+            // 外部SVGを読み込む
 Snap.load("satz.svg", function(fragment) {
-    // $BFI$_9~$s$@(BSVG$B$NFCDj$NMWAG$rA*Br(B
+    // 読み込んだSVGの特定の要素を選択
     var GrmMain = fragment.select("#g08")
 .attr({fill:"ffff",
             stroke:"#0FF"
@@ -232,7 +243,7 @@ Snap.load("satz.svg", function(fragment) {
 //en2
 
 
-// $B1_$r@8@.(B
+// 円を生成
   for (var i = 0; i < circleCount; i++) {
   createCircle(i);
   }
