@@ -112,52 +112,56 @@ text.node.style.userSelect = "none";
 
 }
 
+
+
 //ronri
+var groupr = s.group(); 
   if(index===4){
 
 var text = s.text(cx, cy+8, "\u264E");
-text.node.style.userSelect = "none";
 texts.push(text);
- 
+groupr.add(circle, text);
 
- text.attr({
+text.node.style.userSelect = "none"; 
+
+text.attr({
  fill: "#880",
-  "font-size": 35,
+  "font-size": 40,
   "text-anchor": "middle", 
   "dominant-baseline": "middle" 
 });
 
    circle.attr({
-            stroke: "#FF0",
+            stroke: "#ff0",
             strokeWidth: 2
    });
-
- groupm.click(function(){
+ groupr.click(function(){
 
 Snap.load("satz.svg", function(fragment) {
 
     var GrmMain = fragment.select("#g08")
 .attr({fill:"ffff",
-            stroke:"#FF0"
+            stroke:"#880"
  });
       s.append(GrmMain);
  });
 });
 
-
-    
 }
 
 
-//#meirei
+
+//#Command
+var groupc = s.group(); 
   if(index===1){
 
 var text = s.text(cx-1, cy+10, "\u2648");
-text.node.style.userSelect = "none"; 
 texts.push(text);
+groupc.add(circle, text);
 
+text.node.style.userSelect = "none"; 
 
- text.attr({
+text.attr({
  fill: "#080",
   "font-size": 35,
   "text-anchor": "middle", 
@@ -168,29 +172,54 @@ texts.push(text);
             stroke: "#0f0",
             strokeWidth: 2
    });
- 
+ groupc.click(function(){
+
+Snap.load("satz.svg", function(fragment) {
+
+    var GrmMain = fragment.select("#g08")
+.attr({fill:"ffff",
+            stroke:"#080"
+ });
+      s.append(GrmMain);
+ });
+});
+
 }
 
+
 //Class
+ var groupc2 = s.group(); 
   if(index===5){
 
 var text = s.text(cx, cy+3,"\u26E4");
-text.node.style.userSelect = "none"; 
 texts.push(text);
+groupc2.add(circle, text);
 
+text.node.style.userSelect = "none"; 
 
- text.attr({
+text.attr({
  fill: "#fff",
-  "font-size": 50,
+  "font-size": 35,
   "text-anchor": "middle", 
   "dominant-baseline": "middle" 
 });
 
    circle.attr({
-            fill: "#0f0", 
-            stroke: "#fff",
-            strokeWidth: 2
+            stroke: "#fff": ,
+            fill: "#080": 
    });
+ groupc2.click(function(){
+
+Snap.load("satz.svg", function(fragment) {
+
+    var GrmMain = fragment.select("#g08")
+.attr({fill:"#080",
+            stroke:"#FFF",
+            strokeWidth: 2
+ });
+      s.append(GrmMain);
+ });
+});
 
 }
 
