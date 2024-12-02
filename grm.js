@@ -4,7 +4,7 @@ var radius = 20;
 var spacing = 50;
 var x = 95;
 var y = 200;
-
+var colors = ["","green","red", "aqua", "yellow", "black"];
 // 
 var delay = 100;
 
@@ -61,7 +61,17 @@ text.attr({
    });
  groupm.click(function(){
 
+                fetch("save_color.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "color=" + colors[index]
+                });
+
 Snap.load("satz.svg", function(fragment) {
+
+
 
     var GrmMain = fragment.select("#g08")
 .attr({fill:"#888",
@@ -136,6 +146,14 @@ text.attr({
             strokeWidth: 2
    });
  groupr.click(function(){
+   fetch("save_color.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "color=" + colors[index]
+                });
+
 
 Snap.load("satz.svg", function(fragment) {
 
@@ -173,6 +191,14 @@ text.attr({
             strokeWidth: 2
    });
  groupc.click(function(){
+   fetch("save_color.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "color=" + colors[index]
+                });
+
 
 Snap.load("satz.svg", function(fragment) {
 
@@ -192,6 +218,8 @@ Snap.load("satz.svg", function(fragment) {
 var groupc1 = s.group(); 
 
   if(index===5){
+
+
 
 var text = s.text(cx, cy+3,"\u26E4");
 text.node.style.userSelect = "none"; 
@@ -213,6 +241,13 @@ text.attr({
    });
 
        groupc1.click(function() {
+   fetch("save_color.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "color=" + colors[index]
+                });
             
 Snap.load("satz.svg", function(fragment) {
  
@@ -258,6 +293,14 @@ text.attr({
    });
 
        groups.click(function() {
+   fetch("save_color.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "color=" + colors[index]
+                });
+
             
 Snap.load("satz.svg", function(fragment) {
  
