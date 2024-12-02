@@ -42,7 +42,7 @@ overflow-y: scroll;
 <div>
 　mare<br>
  <div class="box code">
-<span class= myFontClass">
+<span class="myFontClass">
 <?php
 $data = file('colors.txt'); 
 
@@ -50,7 +50,8 @@ foreach ($data as $line) {
     echo "<font color=" . $line .">テスト</font><br/>";
 }
 
-?></span>
+?>
+</span>
 </div>
 </div>
 <br>
