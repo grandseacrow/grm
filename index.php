@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="style.css">
-<title>Grm0.81(git)</title>
+<title>Grm0.82(lsv)</title>
 
     <title>Snap.svg SVG Displaytest</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
@@ -45,10 +45,23 @@ overflow-y: scroll;
 <span class="myFontClass">
 <?php
 $data = file('colors.txt'); 
+ $queue = array(); 
+
+function addToQueue(&$queue, $newString) {
+  array_push($queue, $newString); 
+  if (count($queue) >  7) {
+  array_shift($queue); 
+ } 
+}
 
 foreach ($data as $line) {
-    echo "<font color=" . $line .">テスト</font><br/>";
+addToQueue($queue,"<font color=" . $line .">テスト</font><br/>");
 }
+
+for($i=1;$i<7;$i++){
+echo($queue[$i]);
+}
+
 
 ?>
 </span>
