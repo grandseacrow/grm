@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="style.css">
-<title>Grm0.82(lsv)</title>
+<title>Grm0.82(git)</title>
 
     <title>Snap.svg SVG Displaytest</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
