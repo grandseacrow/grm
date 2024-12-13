@@ -4,12 +4,13 @@ var radius = 20;
 var spacing = 50;
 var x = 95;
 var y = 200;
-var colors = ["","green","red", "aqua", "yellow", "black"];
-// 
 var delay = 100;
-
+//
 var circles = [];
 var texts = [];
+var colors = ["white","green","red", "aqua", "orange", "gray"];
+var lunetext= ["\u292C","\u2648","♀","♂","\u264E","\u26E4"];
+var sy=0;
 
 Snap.load("test.svg", function(fragment) {
     var GrmMain = fragment.select("#g846");
@@ -31,63 +32,26 @@ var cy= y+(index-2.5) *(index-2.5) * spacing/2.5;
 
   setTimeout(function() {
     var circle = s.circle(cx ,cy, radius);
-    circle.attr({
-      fill: "#fff"
-    });
- circles.push(circle);
-
-
-
-
-//moji 
-var groupm = s.group(); 
-  if(index===2){
-var text = s.text(cx, cy+5, "♀");
-texts.push(text);
-groupm.add(circle, text);
-
-text.node.style.userSelect = "none"; 
-
-text.attr({
- fill: "#800",
-  "font-size": 40,
-  "text-anchor": "middle", 
-  "dominant-baseline": "middle" 
-});
-
-   circle.attr({
-            stroke: "#f00",
+    var fc="#fff";
+    if(index==0 || index==5){
+    fc="#0f0";
+    }
+    
+     circle.attr({
+            stroke: colors[index]
+            ,
+            fill:fc
+            ,
             strokeWidth: 2
    });
- groupm.click(function(){
+   circles.push(circle);
 
-                fetch("save_color.php", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: "color=" + colors[index]
-                });
-
-Snap.load("satz.svg", function(fragment) {
-
-
-
-    var GrmMain = fragment.select("#g08")
-.attr({fill:"#888",
-            stroke:"#F00"
- });
-      s.append(GrmMain);
- });
-});
-
-}
 
 //close
 var group0 = s.group(); 
   if(index===0){
 
-var text = s.text(cx, cy+3, "\u292C");
+var text = s.text(cx, cy, lunetext[index]);
 text.node.style.userSelect = "none";
 texts.push(text);
 group0.add(circle, text);
@@ -101,11 +65,6 @@ group0.add(circle, text);
 });
 text.node.style.userSelect = "none"; 
 
-   circle.attr({
- fill: "#0f0",
-            stroke: "#fff",
-            strokeWidth: 2
-   });
 
  group0.click(function() {
 
@@ -120,33 +79,32 @@ text.node.style.userSelect = "none";
 
 });
 
-}
+}else{
 
+//sonota
+if(index < 5){
+ sy=1;
+ }else{
+ sy=0;
+ }
 
-
-//ronri
-var groupr = s.group(); 
-  if(index===4){
-
-var text = s.text(cx, cy+8, "\u264E");
+var text = s.text(cx, cy+10*sy, lunetext[index]);
 texts.push(text);
-groupr.add(circle, text);
+group0.add(circle, text);
 
 text.node.style.userSelect = "none"; 
 
 text.attr({
- fill: "#880",
-  "font-size": 40,
+ fill: colors[index],
+  "font-size": 30,
   "text-anchor": "middle", 
   "dominant-baseline": "middle" 
 });
 
-   circle.attr({
-            stroke: "#ff0",
-            strokeWidth: 2
-   });
- groupr.click(function(){
-   fetch("save_color.php", {
+
+ group0.click(function(){
+
+                fetch("save_color.php", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -154,106 +112,13 @@ text.attr({
                     body: "color=" + colors[index]
                 });
 
-
 Snap.load("satz.svg", function(fragment) {
 
-    var GrmMain = fragment.select("#g08")
-.attr({fill:"#888",
-            stroke:"#FF0"
- });
-      s.append(GrmMain);
- });
-});
 
-}
-
-
-
-//#Command
-var groupc = s.group(); 
-  if(index===1){
-
-var text = s.text(cx-1, cy+10, "\u2648");
-texts.push(text);
-groupc.add(circle, text);
-
-text.node.style.userSelect = "none"; 
-
-text.attr({
- fill: "#080",
-  "font-size": 35,
-  "text-anchor": "middle", 
-  "dominant-baseline": "middle" 
-});
-
-   circle.attr({
-            stroke: "#0f0",
-            strokeWidth: 2
-   });
- groupc.click(function(){
-   fetch("save_color.php", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: "color=" + colors[index]
-                });
-
-
-Snap.load("satz.svg", function(fragment) {
 
     var GrmMain = fragment.select("#g08")
-.attr({fill:"#888",
-            stroke:"#080"
- });
-      s.append(GrmMain);
- });
-});
-
-}
-
-
-
-//Class
-var groupc1 = s.group(); 
-
-  if(index===5){
-
-
-
-var text = s.text(cx, cy+3,"\u26E4");
-text.node.style.userSelect = "none"; 
-texts.push(text);
-groupc1.add(circle, text);
-
-
-text.attr({
- fill: "#000",
-  "font-size": 40,
-  "text-anchor": "middle", 
-  "dominant-baseline": "middle" 
-});
-
-   circle.attr({
-            stroke: "#FFF",
-            fill: "#0F0",
-            strokeWidth: 2
-   });
-
-       groupc1.click(function() {
-   fetch("save_color.php", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: "color=" + colors[index]
-                });
-            
-Snap.load("satz.svg", function(fragment) {
- 
-    var GrmMain = fragment.select("#g08")
-.attr({fill:"#888",
-            stroke:"#000"
+.attr({fill:"#fff",
+            stroke:colors[index]
  });
       s.append(GrmMain);
  });
@@ -263,58 +128,8 @@ Snap.load("satz.svg", function(fragment) {
 
 }
 
- 
 
 
-
-
-
-//suuji
-var groups = s.group(); 
-
-  if(index===3){
-
-var text = s.text(cx, cy+5, "♂");
-text.node.style.userSelect = "none"; 
-texts.push(text);
-groups.add(circle, text);
-
-
-text.attr({
- fill: "#08f",
-  "font-size": 40,
-  "text-anchor": "middle", 
-  "dominant-baseline": "middle" 
-});
-
-   circle.attr({
-            stroke: "#0FF",
-            strokeWidth: 2
-   });
-
-       groups.click(function() {
-   fetch("save_color.php", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: "color=" + colors[index]
-                });
-
-            
-Snap.load("satz.svg", function(fragment) {
- 
-    var GrmMain = fragment.select("#g08")
-.attr({fill:"#888",
-            stroke:"#0FF"
- });
-      s.append(GrmMain);
- });
-});
-
-
-
-}
 
 
   }, delay * index);
