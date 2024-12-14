@@ -46,6 +46,18 @@ var cy= y+(index-2.5) *(index-2.5) * spacing/2.5;
    });
    circles.push(circle);
 
+ const url = 'http://yoseisan.happy.nu/grm/test/colors.txt'; // fetch APIを使ってテキストファイルを取得
+    fetch(url) .then(response => response.text()) .then(data => { // テキストを行ごとに分割
+      const lines = data.split('\n'); // 行数を取得
+      const lineCount = lines.length; // 最後の行の文字を取得
+      const lastLine = lines[lineCount - 1]; // Snap.svgを使ってSVG要素を作成
+      const s = Snap(800, 600); // 行数を表示
+      s.text(100, 100, `行数: ${lineCount}`); // 最後の行の文字を表示
+      s.text(100, 150, `最後の行の文字: ${lastLine}`);
+    }) .catch(error => {
+      console.error('Error fetching the text file:', error);
+    });   
+    
 
 //close
 var group0 = s.group(); 
