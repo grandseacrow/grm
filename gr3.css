@@ -1,0 +1,19 @@
+body{
+ background-color: #000;
+ color: green;
+font-size: 15px;
+}
+
+.lines{
+  stroke: green;
+  stroke-width:2px;
+}
+
+@font-face {
+  font-family: "Grmfont";
+  src: url("GRMfont.woff")  format('woff');
+}
+.myFontClass {
+  font-family: "Grmfont";
+overflow-y: scroll;
+}
