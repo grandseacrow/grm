@@ -1,6 +1,7 @@
     const width = 1200;
     const height = 640;
-
+    const me= "mære";//いちいち修正が面倒なので
+    const Vr=0.69;//ver修正を書き込みやすいように
 
     // SVG 要素を追加
     const svg = d3.select("body").append("svg")
@@ -12,7 +13,7 @@ svg.append("text")
 .attr("x",450)
 .attr("y",600)
    .attr("fill", "green")
-    .text("gr3.js Ver0.6");
+    .text("gr3.js Ver"+Vr);//変数処理
       
 
     // ズーム動作を定義
@@ -36,6 +37,15 @@ svg.append("text")
       .attr("stroke", "green")      // 円の枠の色
       .attr("stroke-width", 2);     // 円の枠の幅
 
+    const largeCircle2 = g.append("circle")
+      .attr("cx", 250)  // 円の中心の X 座標
+      .attr("cy", 250)       // 円の中心の Y 座標
+      .attr("r", 180)                // 円の半径
+      .attr("fill", "black")         // 円の塗りつぶし
+      .attr("stroke", "green")      // 円の枠の色
+      .attr("stroke-width", 2);     // 円の枠の幅
+
+
     // 小さな円を描画
     const smallCircle = g.append("circle")
       .attr("cx", 400)  // 円の中心の X 座標
@@ -58,18 +68,17 @@ svg.append("text")
       .attr("stroke", "green")      // 線の色
       .attr("stroke-width", 20);     // 線の幅
 
-var dataset = [ [620,30], [620, 350] ];
 
+
+
+//SW枠しばらく封印
 
 //枠
-svg.selectAll("rect") 
-     .data(dataset) 
-     .enter()
-     .append("rect")
-     .attr("x", function(d) { return d[0]; })
-     .attr("y", function(d) { return d[1]; })
+svg.append("rect")
+     .attr("x",620)
+     .attr("y", 20)
   .attr("width", 400)
-  .attr("height", 280)
+  .attr("height",600)
   .attr("rx", 20) // x方向の角の丸み
   .attr("ry", 20) // y方向の角の丸み
 .classed("lines", true);// CSSクラスを追加
@@ -77,28 +86,52 @@ svg.selectAll("rect")
 //文字
   svg.append("text")
      .attr("x", 620)
-     .attr("y", 25)
+     .attr("y", 15)
     .attr("fill", "green")
-    .text("mere");
+    .text(me);//変数処理
     
-   svg.append("text")
-     .attr("x", 620)
-     .attr("y", 345)
-    .attr("fill", "green")
-    .text("SW");
+// SW しばらく封印
+//  svg.append("text")
+ //    .attr("x", 620)
+ //    .attr("y", 335)
+ //   .attr("fill", "green")
+//    .text("SW");
 
 
-//メーレ表示試作
+//メーレ表示
 
 svg.append("text")
   .attr("x", 640)
   .attr("y", 60)
   .style("font-family", "Grmfont")//フォント
   .style("font-size", "20px")//大きさ
-  .text("テスト(A){I←１}")
+  .text("グリムテスト{  }")
     .attr("fill", "green");
 
+//カーソル
+let cox=790;
+let coy=50;
 
+const Ccircle = svg.append("circle")
+  .attr("cx", cox)
+  .attr("cy", coy)
+  .attr("r", 10)
+  .attr("fill", "white");
+
+// 点滅アニメーション
+let opacity = 1;
+setInterval(() => {
+  opacity = opacity === 1 ? 0.5 : 1;
+  Ccircle.style("opacity", opacity);
+}, 1000);
+
+svg.append("text")
+  .attr("x", cox-10)
+  .attr("y", coy+10)
+  .style("font-family", "Grmfont")//フォント
+  .style("font-size", "20px")//大きさ
+  .text("１")
+    .attr("fill", "green");
 
     // ズーム動作をグループ要素に適用
     svg.call(zoom);
