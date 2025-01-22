@@ -1,12 +1,23 @@
-    const width = 1200;
-    const height = 640;
     const me= "mære";//いちいち修正が面倒なので
-    const Vr=0.69;//ver修正を書き込みやすいように
+    const Vr=0.73;//ver修正を書き込みやすいように
+    let z=0;
+
+
+
+        const centerX = 250;
+        const centerY = 250;
+        const radiusA = 250;
+                
+        const radiusB = 50; 
+            let outerRadius = 200;
+        let smallCircles = [];
+
+
 
     // SVG 要素を追加
     const svg = d3.select("body").append("svg")
-      .attr("width", width)
-      .attr("height", height);
+      .attr("width", 1200)
+      .attr("height", 640);
       
       //JsG3バージョン
 svg.append("text") 
@@ -46,31 +57,6 @@ svg.append("text")
       .attr("stroke-width", 2);     // 円の枠の幅
 
 
-    // 小さな円を描画
-    const smallCircle = g.append("circle")
-      .attr("cx", 400)  // 円の中心の X 座標
-      .attr("cy", 400)       // 円の中心の Y 座標
-      .attr("r", 50)                // 円の半径
-      .attr("fill", "white")         // 円の塗りつぶし
-      .attr("stroke", "green")      // 円の枠の色
-      .attr("stroke-width", 2)      // 円の枠の幅
-      .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
-
-    // 線を描画（ノード）
-    const line = lineGroup.append("line")
-      .attr("x1", 250)  // 線の始点の X 座標
-      .attr("y1", 250)       // 線の始点の Y 座標
-      .attr("x2", 400)  // 線の終点の X 座標
-      .attr("y2", 400)       // 線の終点の Y 座標
-      .attr("stroke", "green")      // 線の色
-      .attr("stroke-width", 20);     // 線の幅
-
-
-
-
 //SW枠しばらく封印
 
 //枠
@@ -100,13 +86,13 @@ svg.append("rect")
 
 //メーレ表示
 
-svg.append("text")
-  .attr("x", 640)
-  .attr("y", 60)
-  .style("font-family", "Grmfont")//フォント
-  .style("font-size", "20px")//大きさ
-  .text("グリムテスト{  }")
-    .attr("fill", "green");
+//svg.append("text")
+ // .attr("x", 640)
+//  .attr("y", 60)
+ // .style("font-family", "Grmfont")//フォント
+ // .style("font-size", "20px")//大きさ
+//  .text("グリムテスト{  }")
+//    .attr("fill", "green");
 
 //カーソル
 let cox=790;
@@ -116,7 +102,8 @@ const Ccircle = svg.append("circle")
   .attr("cx", cox)
   .attr("cy", coy)
   .attr("r", 10)
-  .attr("fill", "white");
+  .attr("fill", "white")
+.on("click", addSmallCircles);
 
 // 点滅アニメーション
 let opacity = 1;
@@ -125,13 +112,7 @@ setInterval(() => {
   Ccircle.style("opacity", opacity);
 }, 1000);
 
-svg.append("text")
-  .attr("x", cox-10)
-  .attr("y", coy+10)
-  .style("font-family", "Grmfont")//フォント
-  .style("font-size", "20px")//大きさ
-  .text("１")
-    .attr("fill", "green");
+
 
     // ズーム動作をグループ要素に適用
     svg.call(zoom);
@@ -140,25 +121,46 @@ svg.append("text")
     function zoomed(event) {
       g.attr("transform", event.transform);
     }
+    
 
-    // ドラッグイベントの処理
-    function dragstarted(event, d) {
-      d3.select(this)
-        .raise()
-        .attr("opacity", 0.5);    // 半透明に設定
-    }
+    
+    function addSmallCircles() {
+             const maxOuterCircles = 6;
 
-    function dragged(event, d) {
-      d3.select(this)
-        .attr("cx", event.x)
-        .attr("cy", event.y);
-      line
-        .attr("x2", event.x)
-        .attr("y2", event.y);  // 線の終点を更新
-    }
+            
+            if( z == 5){
+            z=0;
+            outerRadius = outerRadius + 100 ;
+            
+            }else{
+            z++;
+            }
+    
+        
+                const angle = Math.PI * 2 * (smallCircles.length / maxOuterCircles);
+                const newX = centerX + outerRadius * Math.cos(angle);
+                const newY = centerY + outerRadius * Math.sin(angle);
 
-    function dragended(event, d) {
-      d3.select(this)
-        .attr("stroke", "green")  // ドラッグ終了後に元の色に戻す
-        .attr("opacity", 1);      // 透明度を元に戻す
-    }
+                const smallCircle = g.append("circle")
+                    .attr("cx", newX)
+                    .attr("cy", newY)
+                    .attr("r", radiusB)
+                    .attr("fill", "white")
+                    .call(d3.drag().on("drag", function (event) {
+                        d3.select(this).attr("cx", event.x).attr("cy", event.y);
+                        line.attr("x2", event.x).attr("y2", event.y);
+                    }));
+                    
+
+
+                const line = lineGroup.append("line")
+                    .attr("x1", centerX)
+                    .attr("y1", centerY)
+                    .attr("x2", newX)
+                    .attr("y2", newY)
+							      .attr("stroke", "green")      // 線の色
+							      .attr("stroke-width", 20);     // 線の幅
+
+                smallCircles.push(smallCircle);
+          
+        }
