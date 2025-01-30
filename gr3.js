@@ -1,5 +1,5 @@
     const me= "mære";//いちいち修正が面倒なので
-    const Vr=0.73;//ver修正を書き込みやすいように
+    const Vr=0.76;//ver修正を書き込みやすいように
     let z=0;
 
 
@@ -138,8 +138,8 @@ setInterval(() => {
     
         
                 const angle = Math.PI * 2 * (smallCircles.length / maxOuterCircles);
-                const newX = centerX + outerRadius * Math.cos(angle);
-                const newY = centerY + outerRadius * Math.sin(angle);
+                const newX = centerX + outerRadius * Math.cos(angle)*1.5;//test
+                const newY = centerY + outerRadius * Math.sin(angle)*1.5;//test
 
                 const smallCircle = g.append("circle")
                     .attr("cx", newX)
@@ -161,6 +161,6 @@ setInterval(() => {
 							      .attr("stroke", "green")      // 線の色
 							      .attr("stroke-width", 20);     // 線の幅
 
-                smallCircles.push(smallCircle);
+               smallCircles.push({newX,newY,smallCircle});
           
         }
