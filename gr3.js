@@ -149,8 +149,11 @@ setInterval(() => {
                     .call(d3.drag().on("drag", function (event) {
                         d3.select(this).attr("cx", event.x).attr("cy", event.y);
                         line.attr("x2", event.x).attr("y2", event.y);
+               
                     }));
                     
+                    
+
 
 
                 const line = lineGroup.append("line")
@@ -160,6 +163,22 @@ setInterval(() => {
                     .attr("y2", newY)
 							      .attr("stroke", "green")      // 線の色
 							      .attr("stroke-width", 20);     // 線の幅
+                    
+                    
+                    
+           if(smallCircles.length>0){
+           const prev=smallCircles[smallCircles.length-1]
+           const angle2 = Math.PI * 2 * ((smallCircles.length-0.5) / maxOuterCircles);
+                const pbx = centerX + outerRadius * Math.cos(angle2)*1.5;//test
+                const pby = centerY + outerRadius * Math.sin(angle2)*1.5;//test           
+           
+                    const path = g.append("path")
+          .attr("d", `M ${prev.newX} ${prev.newY} S ${pbx} ${pby} ${newX} ${newY}`)
+    .attr("stroke", "white") // 線の色
+    .attr("fill", "none") // 線の幅
+    .attr("stroke-width", 10) // 線の幅
+                  
+                    }
 
                smallCircles.push({newX,newY,smallCircle});
           
