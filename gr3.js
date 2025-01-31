@@ -1,8 +1,10 @@
-    const me= "mære";//いちいち修正が面倒なので
-    const Vr=0.76;//ver修正を書き込みやすいように
+    const me= "mre";//いちいち修正が面倒なので
+    const Vr=0.81;//ver修正を書き込みやすいように
     let z=0;
-
-
+    let index=0;
+		let xx=0;
+    let yy=0;
+    
 
         const centerX = 250;
         const centerY = 250;
@@ -144,13 +146,26 @@ setInterval(() => {
                 const smallCircle = g.append("circle")
                     .attr("cx", newX)
                     .attr("cy", newY)
-                    .attr("r", radiusB)
-                    .attr("fill", "white")
+                    .attr("r", radiusB+index)
+                    .attr("fill", "black")
+                    .attr("stroke", "green")      // 線の色
+							      .attr("stroke-width", 2)     // 線の幅
                     .call(d3.drag().on("drag", function (event) {
-                        d3.select(this).attr("cx", event.x).attr("cy", event.y);
+                        d3.select(this).attr("fill", "white").attr("cx", event.x).attr("cy", event.y);
                         line.attr("x2", event.x).attr("y2", event.y);
+               const idS=d3.select(this).attr("r") -radiusB;
+               xx=event.x;
+               yy=event.y;
+               smallCircles.splice(idS,0);
+               smallCircles.splice(idS,1,{xx,yy,smallCircle});
+             
                
-                    }));
+                    })
+                    .on("end", function (event) {
+                        d3.select(this).attr("fill", "black");
+                        })
+                    
+                    );
                     
                     
 
@@ -173,13 +188,26 @@ setInterval(() => {
                 const pby = centerY + outerRadius * Math.sin(angle2)*1.5;//test           
            
                     const path = g.append("path")
-          .attr("d", `M ${prev.newX} ${prev.newY} S ${pbx} ${pby} ${newX} ${newY}`)
+          .attr("d", `M ${prev.xx} ${prev.yy} S ${pbx} ${pby} ${newX} ${newY}`)
     .attr("stroke", "white") // 線の色
     .attr("fill", "none") // 線の幅
     .attr("stroke-width", 10) // 線の幅
-                  
-                    }
+    
+    const smallCircle2 = g.append("circle")
+                    .attr("cx", pbx)
+                    .attr("cy", pby)
+                    .attr("r", 10+index)
+                    .attr("fill", "grey") 
+                    .call(d3.drag().on("drag", function (event) {
+                        d3.select(this).attr("cx", event.x).attr("cy", event.y);
+                         path.attr("d", `M ${prev.xx} ${prev.yy} S ${event.x} ${event.y} ${newX} ${newY}`);
+                    }))
 
-               smallCircles.push({newX,newY,smallCircle});
-          
+}
+					xx=newX;
+					yy=newY;
+          smallCircles.push({xx,yy,smallCircle});
+          index++;
         }
+        
+        
