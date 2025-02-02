@@ -7,6 +7,7 @@
     const radiusA = 250;
 //@１　サブ魔法円
     const radiusB = 50; 
+    const nan=["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
     
     let outerRadius = 200;
     let smallCircles = [];
@@ -15,7 +16,7 @@
     let index=0;
 		let xx=0;
     let yy=0;
-    let cox=790;
+    let cox=750;
     let coy=40;
 
 // SVG 要素を追加
@@ -160,8 +161,9 @@ function addSmallCircles() {
     
         
       const angle = Math.PI * 2 * (smallCircles.length / maxOuterCircles);
-      const newX = centerX + outerRadius * Math.cos(angle)*1.5;//test
-      const newY = centerY + outerRadius * Math.sin(angle)*1.5;//test
+      const newX = centerX + outerRadius * Math.cos(angle);
+      const newY = centerY + outerRadius * Math.sin(angle);
+
 
 //サブ魔法円表示メイン
       const smallCircle = g.append("circle")
@@ -171,11 +173,13 @@ function addSmallCircles() {
       .attr("fill", "black")
       .attr("stroke", "green")     
       .attr("stroke-width", 2) 
+
 //ドラッグイベント
       .call(d3.drag()
       	.on("drag", function (event) {
           d3.select(this).attr("fill", "white").attr("cx", event.x).attr("cy", event.y);
           line.attr("x2", event.x).attr("y2", event.y);
+          sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px");
           
           if(index>1){
            const cf=smallCircles[0];//魔法円最初
@@ -208,9 +212,20 @@ function addSmallCircles() {
         
         .on("end", function (event) {
         d3.select(this).attr("fill", "black");
+        sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px");
       	})
 
            );
+           
+//番号付与
+                    
+      const sno=g.append("text")
+      .attr("x", newX)
+      .attr("y", newY-radiusB-index-10)
+      .attr("fill", "green")
+      .style("font-size", "10px")//大きさ
+      .text(nan[index])
+      .style("user-select","none");//変数処理
                     
 //Mistel（ミステル）表示                      
                 const line = lineGroup.append("line")
@@ -226,8 +241,8 @@ function addSmallCircles() {
 		if(smallCircles.length>0){
              const prev=smallCircles[smallCircles.length-1]
              const angle2 = Math.PI * 2 * ((smallCircles.length-0.5) / maxOuterCircles);
-             const pbx = centerX + outerRadius * Math.cos(angle2)*1.5;//test
-             const pby = centerY + outerRadius * Math.sin(angle2)*1.5;//test           
+             const pbx = centerX + outerRadius * Math.cos(angle2);
+             const pby = centerY + outerRadius * Math.sin(angle2);           
            
 //Pila-B表示  
 		 	     	const smallCircle2 = g.append("circle")
@@ -237,7 +252,7 @@ function addSmallCircles() {
                     .attr("fill", "grey") 
                     .call(d3.drag().on("drag", function (event) {
                         d3.select(this).attr("cx", event.x).attr("cy", event.y);
-         
+                     no.attr("x", event.x-3).attr("y", event.y+3);
                    const idS=d3.select(this).attr("r")-10-1;
                     xx=event.x;
                     yy=event.y;
@@ -265,6 +280,15 @@ function addSmallCircles() {
               //    
                   
                     }))
+                   
+                    
+                       const no=g.append("text")
+                      .attr("x", pbx-3)
+                      .attr("y", pby+3)
+                      .attr("fill", "black")
+                      .style("font-size", "10px")//大きさ
+                      .text(nan[index])
+                      .style("user-select","none");//変数処理
                     
                
             xx=pbx;
