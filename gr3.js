@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.865;//ver修正を書き込みやすいように
+    const Vr=0.895;//ver修正を書き込みやすいように
 
 //@0　メイン魔法円
     const centerX = 250;
@@ -15,6 +15,8 @@
     let index=0;
 		let xx=0;
     let yy=0;
+    let cox=790;
+    let coy=40;
 
 // SVG 要素を追加
     const svg = d3.select("body").append("svg")
@@ -91,18 +93,18 @@
 //    .text("SW");
 
 
-//メーレ表示（テスト用。しばらく封印）
-//svg.append("text")
- // .attr("x", 640)
-//  .attr("y", 60)
- // .style("font-family", "Grmfont")//フォント
- // .style("font-size", "20px")//大きさ
-//  .text("グリムテスト{  }")
-//    .attr("fill", "green");
+//メーレ表示（テスト用）
+let mW="グリム{";
+const mar=svg.append("text")
+  .attr("x", 640)
+  .attr("y", coy+5)
+  .style("font-family", "Grmfont")//フォント
+  .style("font-size", "20px")//大きさ
+  .text(mW)
+  .attr("fill", "green");
 
 //魔法円追加カーソル
-      let cox=790;
-      let coy=50;
+
 
       const Ccircle = svg.append("circle")
         .attr("cx", cox)
@@ -132,7 +134,21 @@
 
 //サブ魔法円追加
 function addSmallCircles() {
+
       const maxOuterCircles = 6;
+      coy=coy+30;
+			Ccircle.attr("cy", coy);
+  
+  //メーレ追加（直書き）
+  mW="テスト{";
+      const mar=svg.append("text")
+        .attr("x", 640)
+        .attr("y", coy+5)
+        .style("font-family", "Grmfont")//フォント
+        .style("font-size", "20px")//大きさ
+        .text(mW)
+        .attr("fill", "green");
+      
 
 //魔法円が６超えたら外側に
 	if( z == 5){
