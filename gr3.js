@@ -1,7 +1,7 @@
     const me= "mære";//文字化け修正が面倒なので
     const Vr=0.92;//ver修正を書き込みやすいように
   let jf=0;
-  jf=5;//	jsfiddle-Grm本体間の誤差修正用
+  jf=5;//	jsfiddle-Gr3本体間の誤差修正用
 
 //@0　メイン魔法円
     const centerX = 250;
