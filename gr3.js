@@ -1,5 +1,7 @@
     const me= "mære";//文字化け修正が面倒なので
     const Vr=0.92;//ver修正を書き込みやすいように
+  let jf=0;
+  jf=5;//	jsfiddle-Grm本体間の誤差修正用
 
 //@0　メイン魔法円
     const centerX = 250;
@@ -212,7 +214,7 @@ function addSmallCircles() {
 //メーレ側の該当箇所を四角で囲む      
           const mrect = svg.append("rect")
                     .attr("x", 630)
-                    .attr("y", idS*30+55)
+                    .attr("y", idS*30+50+jf)
                     .attr("width", 100)
                     .attr("height", 30)                   
                     .attr("stroke", "white") 
