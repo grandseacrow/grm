@@ -1,12 +1,14 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.91;//ver修正を書き込みやすいように
+    const Vr=0.93;//ver修正を書き込みやすいように
+  let jf=0;
+ // jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
 //@0　メイン魔法円
     const centerX = 250;
     const centerY = 250;
     const radiusA = 250;
 //@１　サブ魔法円
-    const radiusB = 50; 
+    const radiusB = 90; 
     const nan=["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
     
     let outerRadius = 200;
@@ -15,7 +17,7 @@
 
     let z=0;
     let index=0;
-		let xx=0;
+    let xx=0;
     let yy=0;
     let cox=750;
     let coy=40;
@@ -177,7 +179,6 @@ function addSmallCircles() {
           d3.select(this).attr("fill", "white").attr("cx", event.x).attr("cy", event.y);
           line.attr("x2", event.x).attr("y2", event.y);
           sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px");
-          
           if(index>1){
            const cf=smallCircles[0];//魔法円最初
           const pf=pilaB[0];//pira最初
@@ -199,17 +200,33 @@ function addSmallCircles() {
           }
           
           
+          
+          
+          
+          
 //サブ魔法円位置更新                        
           const idS=d3.select(this).attr("r") -radiusB;
           xx=event.x;
           yy=event.y;
           smallCircles.splice(idS,0);
           smallCircles.splice(idS,1,{xx,yy,smallCircle});
+          
+//メーレ側の該当箇所を四角で囲む      
+          const mrect = svg.append("rect")
+                    .attr("x", 630)
+                    .attr("y", idS*30+50+jf)
+                    .attr("width", 100)
+                    .attr("height", 30)                   
+                    .attr("stroke", "white") 
+                    .attr("fill", "none") 
+          					.attr("class", "mrect") 
         })
         
+//ドラッグ終了処理        
         .on("end", function (event) {
         d3.select(this).attr("fill", "black");
         sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px");
+        svg.selectAll(".mrect").remove()
       	})
 
            );
@@ -221,8 +238,8 @@ function addSmallCircles() {
       .attr("y", newY-radiusB-index-10)
       .attr("fill", "green")
       .style("font-size", "10px")//大きさ
-      .text(nan[index])
-      .style("user-select","none");//変数処理
+      .text(nan[index]);
+    
                     
 //Mistel（ミステル）表示                      
                 const line = lineGroup.append("line")
@@ -349,6 +366,7 @@ svg.selectAll(".erase").remove()
 g.selectAll("line").remove(); 
 g.selectAll("rect").remove(); 
 g.selectAll("text").remove(); 
+svg.call(zoom.transform, d3.zoomIdentity);
 }
  )
         
