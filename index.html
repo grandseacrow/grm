@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="gr3.css">
-<title>Gr3　button test</title>
+<title>Gr3　boken</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -23,17 +23,45 @@ border-radius: 5px;
 * {
   font-size: 20px;
 }
-#clearButton{
+button{
  width:60px;
  height:40px;
+  color: #000;
+}
+#clearButton{
  overflow:hidden;
- background: green;
- color: #000;
+  background: green;
+
+}
+#loadButton{
+ overflow:hidden;
+  background:#888800;
+}
+#saveButton{
+ overflow:hidden;
+   background:#882222;
 }
 
 #clearButton:hover{
 background:#00ff00;
 }
+#loadButton:hover{
+ 
+  background:#ffff00;
+}
+#saveButton:hover{
+
+   background:#ff4444;
+}
+
+textarea {
+padding:10px;
+ background:#222200;
+color:#ffffff;
+border-radius: 10px;
+border:2px solid  green;
+}
+
 </style>
 </head>
 
@@ -41,11 +69,21 @@ background:#00ff00;
 
 <body>
 <span class="myFontClass">
-グリム①②③④⑤⑥⑦⑧⑨⑩<button id="clearButton" class="myFontClass">ケス</button>
-<button id="clearButton" class="myFontClass">ヨム</button>
-<button id="clearButton" class="myFontClass">カク</button>
+グリム①②③④⑤⑥⑦⑧⑨⑩
+<button id="clearButton" class="myFontClass">ケス</button>
+
 <br>
-</span>
+
 <script src="g3.js"></script>
+</span>
+<br>
+<font size=1>Merseburger</font>
+<button id="loadButton" class="myFontClass">ヨム</button>
+<button id="saveButton" class="myFontClass">カク</button><br>
+<textarea id="Merseburger" name="Merseburger" rows="5" cols="98">
+Eiris sazun idisi sazun hera duoder.
+suma hapt heptidun,suma heri lezidun,suma clubodun
+umbi cuoniouuidi:insprinc haptbandun,inuar uigandun.
+</textarea>
 </body>
 </html>
