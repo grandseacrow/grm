@@ -1,14 +1,14 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.92;//ver修正を書き込みやすいように
+    const Vr=0.93;//ver修正を書き込みやすいように
   let jf=0;
-  jf=5;//	jsfiddle-Gr3本体間の誤差修正用
+  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
 //@0　メイン魔法円
     const centerX = 250;
     const centerY = 250;
     const radiusA = 250;
 //@１　サブ魔法円
-    const radiusB = 50; 
+    const radiusB = 90; 
     const nan=["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
     
     let outerRadius = 200;
@@ -366,6 +366,7 @@ svg.selectAll(".erase").remove()
 g.selectAll("line").remove(); 
 g.selectAll("rect").remove(); 
 g.selectAll("text").remove(); 
+svg.call(zoom.transform, d3.zoomIdentity);//Vey\r,93 zoom初期化追加
 }
  )
         
