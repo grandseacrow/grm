@@ -17,3 +17,12 @@ font-size: 15px;
   font-family: "Grmfont";
 overflow-y: scroll;
 }
+div {
+width:1000px;
+padding:10px;
+margin:10px;
+ background:#222200;
+color:#ffffff;
+border-radius: 10px;
+border:2px solid  green;
+}
