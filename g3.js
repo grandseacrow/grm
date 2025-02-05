@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.93;//ver修正を書き込みやすいように
+    const Vr=0.94;//ver修正を書き込みやすいように
   let jf=0;
  // jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -25,12 +25,12 @@
 // SVG 要素を追加
     const svg = d3.select("body").append("svg")
       .attr("width", 1200)
-      .attr("height", 640);
+      .attr("height",480);//縦サイズ縮小
       
 //Gr3.jsバージョン表示
 		svg.append("text") 
 			.attr("x",450)
-			.attr("y",600)
+			.attr("y",460)
  	  	.attr("fill", "green")
     	.text("gr3.js Ver"+Vr);//変数処理
       
@@ -69,7 +69,7 @@
       .attr("x",620)
       .attr("y", 20)
       .attr("width", 400)
-      .attr("height",600)
+      .attr("height",450)
       .attr("rx", 20) // x方向の角の丸み
       .attr("ry", 20) // y方向の角の丸み
     	.classed("lines", true);// CSSクラスを追加
@@ -347,7 +347,7 @@ function addSmallCircles() {
         
         
 //サブ魔法円消す        
-d3.select("#clearButton").on("click",function(){
+d3.select(".clearButton").on("click",function(){
   for(i=0;i<smallCircles.length;i++){
   smallCircles[i].smallCircle.remove();
   }
@@ -367,8 +367,26 @@ g.selectAll("line").remove();
 g.selectAll("rect").remove(); 
 g.selectAll("text").remove(); 
 svg.call(zoom.transform, d3.zoomIdentity);
+//test
+
+const multilineString ="Spiegel, Spiegel an der Wand, wer ist die schnste Knigin von allen?";
+d3.select(".mess").property("value", multilineString);
 }
+ );
+        
+
+//data書き出し
+d3.select(".yomu").on("click",function(){
+  let data="Gr3"; 
+  for(i=0;i<pilaB.length;i++){
+  data=data+"@S"+parseInt(smallCircles[i].xx) +"-"+parseInt(smallCircles[i].yy);
+  data=data+"P"+parseInt(pilaB[i].xx) +"-"+parseInt(pilaB[i].yy)+` `;
+  }
+  
+  data=data+"@S"+parseInt(smallCircles[smallCircles.length-1].xx) +"-"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed";
+
+d3.select(".mess").property("value", data);
+}
+        
+
  )
-        
-        
-        
