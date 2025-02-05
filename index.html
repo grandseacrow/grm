@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="gr3.css">
-<title>Gr3　boken</title>
+<title>Gr3</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -28,28 +28,28 @@ button{
  height:40px;
   color: #000;
 }
-#clearButton{
+.clearButton{
  overflow:hidden;
   background: green;
 
 }
-#loadButton{
+.yomu{
  overflow:hidden;
   background:#888800;
 }
-#saveButton{
+.kaku{
  overflow:hidden;
    background:#882222;
 }
 
-#clearButton:hover{
+.clearButton:hover{
 background:#00ff00;
 }
-#loadButton:hover{
+.yomu:hover{
  
   background:#ffff00;
 }
-#saveButton:hover{
+.kaku:hover{
 
    background:#ff4444;
 }
@@ -69,21 +69,18 @@ border:2px solid  green;
 
 <body>
 <span class="myFontClass">
-グリム①②③④⑤⑥⑦⑧⑨⑩
-<button id="clearButton" class="myFontClass">ケス</button>
-
+グリム
+<button class="clearButton myFontClass">ケス</button>
+<button class="yomu myFontClass">ヨム</button>
 <br>
 
 <script src="g3.js"></script>
 </span>
 <br>
 <font size=1>Merseburger</font>
-<button id="loadButton" class="myFontClass">ヨム</button>
-<button id="saveButton" class="myFontClass">カク</button><br>
-<textarea id="Merseburger" name="Merseburger" rows="5" cols="98">
-Eiris sazun idisi sazun hera duoder.
-suma hapt heptidun,suma heri lezidun,suma clubodun
-umbi cuoniouuidi:insprinc haptbandun,inuar uigandun.
+<br>
+<textarea class="mess" contenteditable="true" cols="98" rows="3">
+Spiegel, Spiegel an der Wand, wer ist die schönste Königin von allen?
 </textarea>
 </body>
 </html>
