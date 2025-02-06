@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.94;//ver修正を書き込みやすいように
+    const Vr=0.95;//ver修正を書き込みやすいように
   let jf=0;
  // jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -14,6 +14,8 @@
     let outerRadius = 200;
     let smallCircles = [];
     let pilaB = [];
+    let data1=[];
+    let data3=[];
 
     let z=0;
     let index=0;
@@ -383,10 +385,28 @@ d3.select(".yomu").on("click",function(){
   data=data+"P"+parseInt(pilaB[i].xx) +"-"+parseInt(pilaB[i].yy)+` `;
   }
   
-  data=data+"@S"+parseInt(smallCircles[smallCircles.length-1].xx) +"-"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed";
+  data=data+"@S"+parseInt(smallCircles[smallCircles.length-1].xx)+"-"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed";
 
 d3.select(".mess").property("value", data);
 }
-        
+ );
+ 
+ d3.select(".kaku").on("click",function(){
+ const data=d3.select(".mess").property("value");
+  data1=data.split("@");  
 
- )
+let data2="";
+
+for(i=1;i<data1.length-2;i++){
+const data3=data1[i].split("P");
+data2=data2+"@"+i+" S: "+data3[0].substr(1, data3[0].length-1)+`¥n`;
+data2=data2+" P: "+data3[1]+`n`;
+ 
+//   data2=data2+data1[i]+`n`;
+    }
+    data2=data2+"@"+i+" S: "+data1[i].substr(1, data1[i].length-1);
+    
+    d3.select(".mess").property("value", data2);
+
+}
+ );
