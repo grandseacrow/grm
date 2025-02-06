@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.95;//ver修正を書き込みやすいように
+    const Vr=0.955;//ver修正を書き込みやすいように
   let jf=0;
  // jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -381,31 +381,49 @@ d3.select(".mess").property("value", multilineString);
 d3.select(".yomu").on("click",function(){
   let data="Gr3"; 
   for(i=0;i<pilaB.length;i++){
-  data=data+"@S"+parseInt(smallCircles[i].xx) +"-"+parseInt(smallCircles[i].yy);
-  data=data+"P"+parseInt(pilaB[i].xx) +"-"+parseInt(pilaB[i].yy)+` `;
+  data=data+"@Sx"+parseInt(smallCircles[i].xx) +"y"+parseInt(smallCircles[i].yy);
+  data=data+"Px"+parseInt(pilaB[i].xx) +"y"+parseInt(pilaB[i].yy)+` `;
   }
   
-  data=data+"@S"+parseInt(smallCircles[smallCircles.length-1].xx)+"-"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed";
+  data=data+"@Sx"+parseInt(smallCircles[smallCircles.length-1].xx)+"y"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed";
 
 d3.select(".mess").property("value", data);
 }
  );
  
+
  d3.select(".kaku").on("click",function(){
  const data=d3.select(".mess").property("value");
-  data1=data.split("@");  
-
+//@で分割
 let data2="";
+data1=data.split("@");  
+//data2=data2+"*"+data1[1];
+let datax=data1[1].replace('Sx','M ');
+datax=datax.replace('Px', ' S ');
+datax=datax.replace('x',' ');
+datax=datax.replace('y',' ');
+datax=datax.replace('y',' ');
+if(data1.length>2){
+  for(i=2;i<data1.length-2;i++){
+  data2=data2+data1[i];
+  data2=data2.replace('Sx',' ');
+  data2=data2.replace('Px',' ');
+  data2=data2.replace('y',' ');
+  data2=data2.replace('x',' ');
+  
+  }
+}
+  if (data1.length>3){
+  data2=data2+data1[data1.length-2]
+    data2=data2.replace('Sx',' ');
+data2=data2.replace('y',' ');
+  }
 
-for(i=1;i<data1.length-2;i++){
-const data3=data1[i].split("P");
-data2=data2+"@"+i+" S: "+data3[0].substr(1, data3[0].length-1)+`¥n`;
-data2=data2+" P: "+data3[1]+`n`;
- 
-//   data2=data2+data1[i]+`n`;
-    }
-    data2=data2+"@"+i+" S: "+data1[i].substr(1, data1[i].length-1);
-    
+   data2=data2.replace('Sx',' ');
+   data2=data2.replace('y',' ');
+  
+  data2=datax+data2;
+   path.attr("d", data2);
     d3.select(".mess").property("value", data2);
 
 }
