@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.955;//ver修正を書き込みやすいように
+    const Vr=0.96;//ver修正を書き込みやすいように
   let jf=0;
  // jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -10,6 +10,7 @@
 //@１　サブ魔法円
     const radiusB = 90; 
     const nan=["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+    const Ctable=["none","green","white","gray","black"];
     
     let outerRadius = 200;
     let smallCircles = [];
@@ -30,12 +31,7 @@
       .attr("height",480);//縦サイズ縮小
       
 //Gr3.jsバージョン表示
-		svg.append("text") 
-			.attr("x",450)
-			.attr("y",460)
- 	  	.attr("fill", "green")
-    	.text("gr3.js Ver"+Vr);//変数処理
-      
+D3SVG2(svg,0,450,460,"gr3.js Ver"+Vr,Ctable,1);
 
 // ズーム動作を定義
     const zoom = d3.zoom()
@@ -51,13 +47,8 @@
      
 
 // メイン魔法円を描画
-    const largeCircle = g.append("circle")
-      .attr("cx", 250)  // 円の中心の X 座標
-      .attr("cy", 250)       // 円の中心の Y 座標
-      .attr("r", 200)                // 円の半径
-      .attr("fill", "black")         // 円の塗りつぶし
-      .attr("stroke", "green")      // 円の枠の色
-      .attr("stroke-width", 2);     // 円の枠の幅
+const largeCircle = D3SVG2(g,1,250,250,200,Ctable,4,1,2);
+
 
 //捨てpila 順番入れ替え、メイン魔法陣の前に
 		const path = g.append("path")
@@ -67,21 +58,12 @@
   		.attr("stroke-width", 10); // 線の幅
 
 //枠
-    svg.append("rect")
-      .attr("x",620)
-      .attr("y", 20)
-      .attr("width", 400)
-      .attr("height",450)
-      .attr("rx", 20) // x方向の角の丸み
-      .attr("ry", 20) // y方向の角の丸み
-    	.classed("lines", true);// CSSクラスを追加
+
+D3SVG4(svg,1,620,20,1020,470,Ctable,0,1,2,20);
 
 //mre(メーレ)
-    svg.append("text")
-       .attr("x", 620)
-       .attr("y", 15)
-      .attr("fill", "green")
-      .text(me);//変数処理
+D3SVG2(svg,0,620,15,me,Ctable,1);
+
     
 // SW しばらく封印（タグ切り替え？）
 //  svg.append("text")
@@ -100,6 +82,7 @@ svg.append("text")
   .style("font-size", "20px")//大きさ
   .text(mW)
   .attr("fill", "green"); // クラスを追加
+
 
   
 
@@ -350,31 +333,13 @@ function addSmallCircles() {
         
 //サブ魔法円消す        
 d3.select(".clearButton").on("click",function(){
-  for(i=0;i<smallCircles.length;i++){
-  smallCircles[i].smallCircle.remove();
-  }
-//捨てPila再配置
- path.attr("d", "M250 250");
-//変数初期化
-    smallCircles = [];
-    pilaB = [];
-    z=0;
-    index=0;
-    coy=40;
-    Ccircle .attr("cy", coy);
-   
-//その他全消去
-svg.selectAll(".erase").remove()
-g.selectAll("line").remove(); 
-g.selectAll("rect").remove(); 
-g.selectAll("text").remove(); 
-svg.call(zoom.transform, d3.zoomIdentity);
+  zenkes();
 //test
 
 const multilineString ="Spiegel, Spiegel an der Wand, wer ist die schnste Knigin von allen?";
 d3.select(".mess").property("value", multilineString);
 }
- );
+);
         
 
 //data書き出し
@@ -393,18 +358,53 @@ d3.select(".mess").property("value", data);
  
 
  d3.select(".kaku").on("click",function(){
+ zenkes();
+ 
  const data=d3.select(".mess").property("value");
 //@で分割
 let data2="";
 data1=data.split("@");  
 //data2=data2+"*"+data1[1];
+const str=data1[1];
+const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
+const xx = numbers[0]; 
+const yy = numbers[1]; 
+
+      const smallCircle = g.append("circle")
+      .attr("cx", xx)
+      .attr("cy", yy)
+      .attr("r", radiusB)
+      .attr("fill", "black")
+      .attr("stroke", "green")     
+      .attr("stroke-width", 2) ;
+      smallCircles.push({xx,yy,smallCircle});
+
+
+//1個目円位置
+
 let datax=data1[1].replace('Sx','M ');
 datax=datax.replace('Px', ' S ');
 datax=datax.replace('x',' ');
 datax=datax.replace('y',' ');
 datax=datax.replace('y',' ');
+
 if(data1.length>2){
   for(i=2;i<data1.length-2;i++){
+const str=data1[i];
+const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
+const xx = numbers[0]; 
+const yy = numbers[1]; 
+
+
+      const smallCircle = g.append("circle")
+      .attr("cx", xx)
+      .attr("cy", yy)
+      .attr("r", radiusB+index-1)
+      .attr("fill", "black")
+      .attr("stroke", "green")     
+      .attr("stroke-width", 2) ;
+      smallCircles.push({xx,yy,smallCircle});
+
   data2=data2+data1[i];
   data2=data2.replace('Sx',' ');
   data2=data2.replace('Px',' ');
@@ -414,6 +414,20 @@ if(data1.length>2){
   }
 }
   if (data1.length>3){
+const str=data1[data1.length-2];
+const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
+const xx = numbers[0]; 
+const yy = numbers[1]; 
+
+     const smallCircle = g.append("circle")
+      .attr("cx", xx)
+      .attr("cy", yy)
+      .attr("r", radiusB+data1.length-2)
+      .attr("fill", "black")
+      .attr("stroke", "green")     
+      .attr("stroke-width", 2) ;
+      smallCircles.push({xx,yy,smallCircle});
+
   data2=data2+data1[data1.length-2]
     data2=data2.replace('Sx',' ');
 data2=data2.replace('y',' ');
@@ -428,3 +442,76 @@ data2=data2.replace('y',' ');
 
 }
  );
+ 
+ function zenkes(){
+ for(i=0;i<smallCircles.length;i++){
+  smallCircles[i].smallCircle.remove();
+  }
+//捨てPila再配置
+ path.attr("d", "M250 250");
+//変数初期化
+    smallCircles = [];
+    pilaB = [];
+    z=0;
+    index=0;
+    coy=40;
+    Ccircle .attr("cy", coy);
+   
+//その他全消去
+svg.selectAll(".erase").remove()
+g.selectAll("line").remove(); 
+g.selectAll("rect").remove(); 
+g.selectAll("text").remove(); 
+svg.call(zoom.transform, d3.zoomIdentity);
+ 
+ }
+ 
+function D3SVG2(set,k,x,y,etc,Ctable,nakaC,sotoC,sotoW){
+   switch(k){
+   case 1:
+   set.append("circle")//円
+        .attr("cx", x)
+        .attr("cy", y)
+        .attr("r", etc)
+        .attr("fill", Ctable[nakaC])
+        .attr("stroke", Ctable[sotoC])     
+        .attr("stroke-width", sotoW) ;
+        break;
+        
+        default:
+		set.append("text") //文字
+			.attr("x",x)
+			.attr("y",y)
+ 	  	.attr("fill", Ctable[nakaC])
+    	.text(etc);//変数処理
+
+   }
+   return set;
+  }
+  
+function D3SVG4(set,k,x,y,x2,y2,Ctable,nakaC,sotoC,sotoW,r){
+	switch(k){
+   case 1:
+   set.append("rect")//四角
+        .attr("x",x)
+        .attr("y",y)
+        .attr("width", x2-x)
+        .attr("height",y2-y)
+        .attr("rx", r) // x方向の角の丸み
+        .attr("ry", r) // y方向の角の丸み
+        .attr("fill", Ctable[nakaC])
+        .attr("stroke", Ctable[sotoC])     
+        .attr("stroke-width", sotoW) ;
+     break; 
+ default:
+		set.append("line") //文字
+        .attr("x1",x)
+        .attr("y1",y)
+        .attr("x2",x2)
+        .attr("y2",y2)
+        .attr("stroke", Ctable[sotoC])     
+        .attr("stroke-width", sotoW) ;
+
+ 	 }
+   return set;
+  }
