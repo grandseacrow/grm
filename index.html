@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="gr3.css">
-<title>Gr3</title>
+<title>Gr3 一部機能オフ</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,6 +42,11 @@ button{
    background:#882222;
 }
 
+.run{
+ overflow:hidden;
+   background:#008888;
+}
+
 .clearButton:hover{
 background:#00ff00;
 }
@@ -49,10 +54,11 @@ background:#00ff00;
  
   background:#ffff00;
 }
-.kaku:hover{
-
-   background:#ff4444;
+.run:hover{
+ 
+  background:#00ffff;
 }
+
 
 textarea {
 padding:10px;
@@ -61,6 +67,26 @@ color:#ffffff;
 border-radius: 10px;
 border:2px solid  green;
 }
+
+
+
+.stz {
+  color: "white";
+  opacity: 0.1;
+  text-decoration: none;
+  transition: opacity 0.5s ease; /* 0.5秒かけて透明度が変化 */
+}
+
+.stz:hover {
+  opacity: 1; /* マウスオーバーで透明度を0.5にする */
+}
+
+
+
+
+
+
+
 
 </style>
 </head>
@@ -72,8 +98,8 @@ border:2px solid  green;
 グリム
 <button class="clearButton myFontClass">ケス</button>
 <button class="yomu myFontClass">ヨム</button>
-<button class="kaku myFontClass">カク</button>
-
+<button class="kaku myFontClass" disabled>カク</button>
+<button class="run myFontClass" disabled>スル</button>
 <br>
 
 <script src="g3.js"></script>
