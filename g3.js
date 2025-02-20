@@ -1,7 +1,7 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.96;//ver修正を書き込みやすいように
+    const Vr=0.966;//ver修正を書き込みやすいように
   let jf=0;
- // jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
+ jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
 //@0　メイン魔法円
     const centerX = 250;
@@ -9,7 +9,7 @@
     const radiusA = 250;
 //@１　サブ魔法円
     const radiusB = 90; 
-    const nan=["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+    const nan=["Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ","Ⅵ","Ⅶ","Ⅷ","Ⅸ","Ⅹ","Ⅺ","Ⅻ"];
     const Ctable=["none","green","white","gray","black"];
     
     let outerRadius = 200;
@@ -64,14 +64,6 @@ D3SVG4(svg,1,620,20,1020,470,Ctable,0,1,2,20);
 //mre(メーレ)
 D3SVG2(svg,0,620,15,me,Ctable,1);
 
-    
-// SW しばらく封印（タグ切り替え？）
-//  svg.append("text")
- //    .attr("x", 620)
- //    .attr("y", 335)
- //   .attr("fill", "green")
-//    .text("SW");
-
 
 //メーレ表示（テスト用）
 let mW="グリム{";
@@ -86,14 +78,15 @@ svg.append("text")
 
   
 
-//魔法円追加カーソル
+//■カーソル（初期）
 
 
-      const Ccircle = svg.append("circle")
-        .attr("cx", cox)
-        .attr("cy", coy)
-        .attr("r", 10)
-        .attr("fill", "white")
+      const Ccircle = svg.append("rect")
+       .attr("x", 630)
+       .attr("y", coy+10)
+       .attr("width", 100)
+       .attr("height",10)                   
+       .attr("fill", "green")
   	    .on("click", addSmallCircles);
 
 // 点滅アニメーション
@@ -116,25 +109,36 @@ svg.append("text")
     
 
 //サブ魔法円追加
-function addSmallCircles() {
+function addSmallCircles(flag) {
 
       const maxOuterCircles = 6;
       coy=coy+30;
-			Ccircle.attr("cy", coy);
+			Ccircle.attr("y", coy+20);
   
+  //gr グループ
+
+  
+ 
   //メーレ追加（直書き）
-  mW="テスト{";
+  mW=nan[index]+"(　){";
       svg.append("text")
         .attr("x", 640)
-        .attr("y", coy+5)
+        .attr("y", coy+4+jf)
         .attr("class", "erase")
         .style("font-family", "Grmfont")//フォント
         .style("font-size", "20px")//大きさ
         .text(mW)
         .attr("fill", "green");
-        
-      
 
+  //メーレ前に■
+   svg.append("rect")
+       .attr("x", 630)
+       .attr("y", coy-15)
+       .attr("width", 100)
+       .attr("height", 28)                   
+       .attr("fill", "white")
+       .attr("class", "erase stz")
+ 
 //魔法円が６超えたら外側に
 	if( z == 5){
             z=0;
@@ -144,7 +148,7 @@ function addSmallCircles() {
  	}
     
         
-      const angle = Math.PI * 2 * (smallCircles.length / maxOuterCircles);
+      const angle = Math.PI * 2 * (smallCircles.length / maxOuterCircles);    
       const newX = centerX + outerRadius * Math.cos(angle);
       const newY = centerY + outerRadius * Math.sin(angle);
 
@@ -199,12 +203,12 @@ function addSmallCircles() {
 //メーレ側の該当箇所を四角で囲む      
           const mrect = svg.append("rect")
                     .attr("x", 630)
-                    .attr("y", idS*30+50+jf)
+                    .attr("y", idS*30+54-jf/2.5)
                     .attr("width", 100)
                     .attr("height", 30)                   
                     .attr("stroke", "white") 
                     .attr("fill", "none") 
-          					.attr("class", "mrect") 
+			          	　.attr("class", "mrect") 
         })
         
 //ドラッグ終了処理        
@@ -240,9 +244,10 @@ function addSmallCircles() {
 		if(smallCircles.length>0){
              const prev=smallCircles[smallCircles.length-1]
              const angle2 = Math.PI * 2 * ((smallCircles.length-0.5) / maxOuterCircles);
+
+            
              const pbx = centerX + outerRadius * Math.cos(angle2);
-             const pby = centerY + outerRadius * Math.sin(angle2);           
-           
+             const pby = centerY + outerRadius * Math.sin(angle2);
 //Pila-B表示  
 		 	     	const pila = g.append("rect")
                     .attr("x", pbx)
@@ -394,7 +399,7 @@ const str=data1[i];
 const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
 const xx = numbers[0]; 
 const yy = numbers[1]; 
-
+addSmallCircles(1);
 
       const smallCircle = g.append("circle")
       .attr("cx", xx)
@@ -419,14 +424,7 @@ const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
 const xx = numbers[0]; 
 const yy = numbers[1]; 
 
-     const smallCircle = g.append("circle")
-      .attr("cx", xx)
-      .attr("cy", yy)
-      .attr("r", radiusB+data1.length-2)
-      .attr("fill", "black")
-      .attr("stroke", "green")     
-      .attr("stroke-width", 2) ;
-      smallCircles.push({xx,yy,smallCircle});
+ addSmallCircles(1);
 
   data2=data2+data1[data1.length-2]
     data2=data2.replace('Sx',' ');
@@ -455,7 +453,7 @@ data2=data2.replace('y',' ');
     z=0;
     index=0;
     coy=40;
-    Ccircle .attr("cy", coy);
+    Ccircle .attr("y", coy+10);
    
 //その他全消去
 svg.selectAll(".erase").remove()
@@ -515,3 +513,11 @@ function D3SVG4(set,k,x,y,x2,y2,Ctable,nakaC,sotoC,sotoW,r){
  	 }
    return set;
   }
+  
+  function Move(){
+          d3.select(this).attr("fill","white");
+}
+
+function Mout(){
+          d3.select(this).attr("fill","green");
+}
