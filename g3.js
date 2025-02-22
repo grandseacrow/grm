@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.966;//ver修正を書き込みやすいように
+    const Vr=0.967;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -24,6 +24,7 @@
     let yy=0;
     let cox=750;
     let coy=40;
+    let cow=120;
 
 // SVG 要素を追加
     const svg = d3.select("body").append("svg")
@@ -62,7 +63,7 @@ const largeCircle = D3SVG2(g,1,250,250,200,Ctable,4,1,2);
 D3SVG4(svg,1,620,20,1020,470,Ctable,0,1,2,20);
 
 //mre(メーレ)
-D3SVG2(svg,0,620,15,me,Ctable,1);
+D3SVG2(svg,0,640,15,me,Ctable,1);
 
 
 //メーレ表示（テスト用）
@@ -82,12 +83,14 @@ svg.append("text")
 
 
       const Ccircle = svg.append("rect")
-       .attr("x", 630)
-       .attr("y", coy+10)
-       .attr("width", 100)
-       .attr("height",10)                   
-       .attr("fill", "green")
-  	    .on("click", addSmallCircles);
+        .attr("x", 630)
+        .attr("y", coy+10)
+        .attr("rx",5)
+        .attr("ry",5)
+        .attr("width", cow)
+        .attr("height",10)                   
+        .attr("fill", "green")
+        .on("click", addSmallCircles);
 
 // 点滅アニメーション
 
@@ -134,8 +137,10 @@ function addSmallCircles(flag) {
    svg.append("rect")
        .attr("x", 630)
        .attr("y", coy-15)
-       .attr("width", 100)
-       .attr("height", 28)                   
+       .attr("width", cow)
+       .attr("height", 30)
+       .attr("rx",10)
+       .attr("ry",10)
        .attr("fill", "white")
        .attr("class", "erase stz")
  
@@ -165,9 +170,9 @@ function addSmallCircles(flag) {
 //ドラッグイベント
       .call(d3.drag()
       	.on("drag", function (event) {
-          d3.select(this).attr("fill", "white").attr("cx", event.x).attr("cy", event.y);
+          d3.select(this).attr("fill", "green").attr("cx", event.x).attr("cy", event.y);
           line.attr("x2", event.x).attr("y2", event.y);
-          sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px");
+          sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
           if(index>1){
            const cf=smallCircles[0];//魔法円最初
           const pf=pilaB[0];//pira最初
@@ -203,18 +208,22 @@ function addSmallCircles(flag) {
 //メーレ側の該当箇所を四角で囲む      
           const mrect = svg.append("rect")
                     .attr("x", 630)
-                    .attr("y", idS*30+54-jf/2.5)
-                    .attr("width", 100)
+                    .attr("y", idS*30+55)
+                    .attr("rx",10)
+                    .attr("ry",10)
+                    .attr("width", cow)
                     .attr("height", 30)                   
-                    .attr("stroke", "white") 
-                    .attr("fill", "none") 
-			          	　.attr("class", "mrect") 
+                    .attr("stroke", "green") 
+                    .attr("stroke-width",3)
+                    .attr("fill", "green") 
+										.attr("class", "mrect") 
+                    .style("opacity",0.01);
         })
         
 //ドラッグ終了処理        
         .on("end", function (event) {
         d3.select(this).attr("fill", "black");
-        sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px");
+        sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px").attr("fill", "green");
         svg.selectAll(".mrect").remove()
       	})
 
@@ -514,10 +523,3 @@ function D3SVG4(set,k,x,y,x2,y2,Ctable,nakaC,sotoC,sotoW,r){
    return set;
   }
   
-  function Move(){
-          d3.select(this).attr("fill","white");
-}
-
-function Mout(){
-          d3.select(this).attr("fill","green");
-}
