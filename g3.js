@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.967;//ver修正を書き込みやすいように
+     const Vr=0.969;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -25,6 +25,9 @@
     let cox=750;
     let coy=40;
     let cow=120;
+    let ksng=0;
+    let opt=0.2;
+    
 
 // SVG 要素を追加
     const svg = d3.select("body").append("svg")
@@ -143,7 +146,9 @@ function addSmallCircles(flag) {
        .attr("ry",10)
        .attr("fill", "white")
        .attr("class", "erase stz")
- 
+       .on("mouseover",Gmenu)
+       .on("mouseleave",Gleave)
+ console.log(coy-15)
 //魔法円が６超えたら外側に
 	if( z == 5){
             z=0;
@@ -205,8 +210,12 @@ function addSmallCircles(flag) {
           smallCircles.splice(idS,0);
           smallCircles.splice(idS,1,{xx,yy,smallCircle});
           
-//メーレ側の該当箇所を四角で囲む      
-          const mrect = svg.append("rect")
+//メーレ側の該当箇所を四角で囲む 
+if(ksng>0){
+opt=0;
+}
+ksng=1;
+const mrect = svg.append("rect")
                     .attr("x", 630)
                     .attr("y", idS*30+55)
                     .attr("rx",10)
@@ -217,11 +226,13 @@ function addSmallCircles(flag) {
                     .attr("stroke-width",3)
                     .attr("fill", "green") 
 										.attr("class", "mrect") 
-                    .style("opacity",0.01);
+                    .style("opacity",opt);
         })
         
 //ドラッグ終了処理        
         .on("end", function (event) {
+        ksng=0;
+        opt=0.2;
         d3.select(this).attr("fill", "black");
         sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px").attr("fill", "green");
         svg.selectAll(".mrect").remove()
@@ -520,6 +531,33 @@ function D3SVG4(set,k,x,y,x2,y2,Ctable,nakaC,sotoC,sotoW,r){
         .attr("stroke-width", sotoW) ;
 
  	 }
+   return set;
+  }
+  
+function Gmenu(){
+  
+  const [x, y] = d3.pointer(event)
+  const can =parseInt((y-55)/30)
+	const cay =can*30+70
+  if (cay< index*30+70)
+  for(i=0;i<4;i++){
+  const ccc=svg.append("circle")
+          .attr("cx",645+i*30)
+          .attr("cy",cay)
+          .attr("r", 12)
+          .attr("fill", "none")
+          .attr("stroke", "green")     
+          .attr("stroke-width", 1)
+          .attr("class", "ccc") ;
+  }
+  
+console.log("on:"+can);
+}
+function Gleave(){
+svg.selectAll(".ccc").remove()
+console.log("off");
+
+}
    return set;
   }
   
