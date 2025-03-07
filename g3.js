@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.97;//ver修正を書き込みやすいように
+    const Vr=0.98;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -27,7 +27,9 @@
     let coy=40;
     let cow=120;
     let ksng=0;
-    let opt=0.2;
+    let opt=0.1;
+    let bflag=0;
+    let selectS=0;
 
 
 // SVG 要素を追加
@@ -68,6 +70,34 @@ D3SVG4(svg,1,620,20,1020,470,Ctable,0,1,2,20);
 
 //mre(メーレ)
 D3SVG2(svg,0,640,15,me,Ctable,1);
+
+//Bohne（ボーネ）
+  for(i=0;i<4;i++){
+
+  const bean=svg.append("text")
+        .attr("x",705+i*20)
+        .attr("y", 15)
+        .style("font-family", "Grmfont")//フォント
+        .style("font-size", "10px")//大きさ
+        .text(lunetext[i])
+        .attr("fill", "green")
+        .attr("class", "ccc");
+
+  const ccc=svg.append("rect")
+          .attr("x",700+i*20)
+          .attr("y",0)
+          .attr("width", 20)
+          .attr("height",18)
+          .attr("rx",0)
+          .attr("ry",0)
+          .attr("fill", "black")
+           .attr("class", "bbb")
+          .on("mouseenter",Bon)
+          .on("mouseleave",Bout)
+
+      
+  }
+
 
 
 //メーレ表示（テスト用）
@@ -115,7 +145,9 @@ svg.append("text")
     }
     
 
-//サブ魔法円追加
+
+
+//サブ魔法円追加　関数
 function addSmallCircles(flag) {
 
       const maxOuterCircles = 6;
@@ -147,9 +179,11 @@ function addSmallCircles(flag) {
        .attr("ry",10)
        .attr("fill", "white")
        .attr("class", "erase stz")
-       .on("mouseover",Gmenu)
+       .style("opacity",opt)
+       .on("click",Gmenu)
        .on("mouseleave",Gleave)
- console.log(coy-15)
+    
+
 //魔法円が６超えたら外側に
 	if( z == 5){
             z=0;
@@ -172,7 +206,8 @@ function addSmallCircles(flag) {
       .attr("fill", "black")
       .attr("stroke", "green")     
       .attr("stroke-width", 2) 
-
+      .attr("id","c"+index) 
+      
 //ドラッグイベント
       .call(d3.drag()
       	.on("drag", function (event) {
@@ -196,7 +231,7 @@ function addSmallCircles(flag) {
           const ce=smallCircles[smallCircles.length-1];	//魔法円最後
           pilaW=pilaW+` ${ce.xx} ${ce.yy}`;
     				path.attr("d", pilaW);
-         console.log(pilaW)   
+
           }
 
 
@@ -224,7 +259,7 @@ const mrect = svg.append("rect")
                     .attr("stroke", "green") 
                     .attr("stroke-width",3)
                     .attr("fill", "green") 
-										.attr("class", "mrect") 
+					.attr("class", "mrect") 
                     .style("opacity",opt);
         })
         
@@ -233,6 +268,11 @@ const mrect = svg.append("rect")
        ksng=0;
         opt=0.2;
         d3.select(this).attr("fill", "black");
+        
+        const sgg="#c"+selectS;
+    g.selectAll(sgg).attr("fill", "white");
+    
+        selectS
         sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px").attr("fill", "green");
         svg.selectAll(".mrect").remove()
       	})
@@ -537,37 +577,31 @@ function D3SVG4(set,k,x,y,x2,y2,Ctable,nakaC,sotoC,sotoW,r){
   }
 
 function Gmenu(){
+    svg.selectAll(".bbb").attr("fill", "white").style("opacity",0.5);
+    svg.selectAll(".stz").style("opacity",opt);    
+    d3.select(this).style("opacity",0.5);
+    
+selectS= (d3.select(this).attr("y")-55)/30;
+const sgg="#c"+selectS;
+    g.selectAll("circle").attr("fill", "black");
+    g.selectAll(sgg).attr("fill", "white");
 
-  const [x, y] = d3.pointer(event)
-  const can =parseInt((y-55)/30)
-	const cay =can*30+70
-
-  for(i=0;i<4;i++){
-
-  const bean=svg.append("text")
-        .attr("x",637+i*30)
-        .attr("y", cay+7)
-        .style("font-family", "Grmfont")//フォント
-        .style("font-size", "15px")//大きさ
-        .text(lunetext[i])
-        .attr("fill", "black")
-        .attr("class", "ccc");
-
-  const ccc=svg.append("circle")
-          .attr("cx",645+i*30)
-          .attr("cy",cay)
-          .attr("r", 12)
-          .attr("fill", "green")
-          .style("opacity",0.5)
-          .attr("stroke", "green")     
-          .attr("stroke-width", 1)
-          .attr("class", "ccc");
-  }
-
-console.log("on:"+can);
+console.log(sgg);
 }
 function Gleave(){
-svg.selectAll(".ccc").remove()
-console.log("off");
 
+}
+
+function Bon(){
+    d3.select(this)
+      .attr("fill", "green")
+      .attr("rx",15)
+      .attr("ry",15);
+}
+
+function Bout(){
+    d3.select(this)
+      .attr("fill", "white")
+      .attr("rx",0)
+      .attr("ry",0);
 }
