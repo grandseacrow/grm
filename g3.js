@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.98;//ver修正を書き込みやすいように
+    const Vr=0.985;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -12,6 +12,7 @@
     const nan=["Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ","Ⅵ","Ⅶ","Ⅷ","Ⅸ","Ⅹ","Ⅺ","Ⅻ"];
     const Ctable=["none","green","white","gray","black"];
 		const lunetext= ["♈","♀","♎","☆"];
+
 
     let outerRadius = 200;
     let smallCircles = [];
@@ -55,6 +56,20 @@ D3SVG2(svg,0,450,460,"gr3.js Ver"+Vr,Ctable,1);
 
 // メイン魔法円を描画
 const largeCircle = D3SVG2(g,1,250,250,200,Ctable,4,1,2);
+//外部SVG魔法陣
+d3.xml("key.svg").then(function(xml) {
+  const defs = g.append("defs");
+  defs.node().appendChild(xml.documentElement);
+
+  // use要素を使用して、外部SVGファイル内の要素をコピーして円の中に表示
+const MOYO= g.append("use")
+    .attr("xlink:href", "#g0") // 外部SVGファイル内の要素のIDを指定
+    .attr("x",60)
+    .attr("y", 60);
+//    .attr("width", 10)
+//    .attr("height", 10)
+});
+
 
 
 //捨てpila 順番入れ替え、メイン魔法陣の前に
