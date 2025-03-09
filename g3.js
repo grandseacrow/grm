@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.985;//ver修正を書き込みやすいように
+    const Vr=0.99;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -86,32 +86,6 @@ D3SVG4(svg,1,620,20,1020,470,Ctable,0,1,2,20);
 //mre(メーレ)
 D3SVG2(svg,0,640,15,me,Ctable,1);
 
-//Bohne（ボーネ）
-  for(i=0;i<4;i++){
-
-  const bean=svg.append("text")
-        .attr("x",705+i*20)
-        .attr("y", 15)
-        .style("font-family", "Grmfont")//フォント
-        .style("font-size", "10px")//大きさ
-        .text(lunetext[i])
-        .attr("fill", "green")
-        .attr("class", "ccc");
-
-  const ccc=svg.append("rect")
-          .attr("x",700+i*20)
-          .attr("y",0)
-          .attr("width", 20)
-          .attr("height",18)
-          .attr("rx",0)
-          .attr("ry",0)
-          .attr("fill", "black")
-           .attr("class", "bbb")
-          .on("mouseenter",Bon)
-          .on("mouseleave",Bout)
-
-      
-  }
 
 
 
@@ -533,6 +507,8 @@ data2=data2.replace('y',' ');
     Ccircle .attr("y", coy+10);
 
 //その他全消去
+    svg.selectAll(".bbb").remove();
+    svg.selectAll(".ccc").remove();
 svg.selectAll(".erase").remove()
 g.selectAll("line").remove(); 
 g.selectAll("rect").remove(); 
@@ -592,7 +568,8 @@ function D3SVG4(set,k,x,y,x2,y2,Ctable,nakaC,sotoC,sotoW,r){
   }
 
 function Gmenu(){
-    svg.selectAll(".bbb").attr("fill", "white").style("opacity",0.5);
+    svg.selectAll(".bbb").remove();
+    svg.selectAll(".ccc").remove();
     svg.selectAll(".stz").style("opacity",opt);    
     d3.select(this).style("opacity",0.5);
     
@@ -600,6 +577,54 @@ selectS= (d3.select(this).attr("y")-55)/30;
 const sgg="#c"+selectS;
     g.selectAll("circle").attr("fill", "black");
     g.selectAll(sgg).attr("fill", "white");
+
+ //   zoom test
+  const circle =  g.selectAll(sgg).node();
+  const bounds = circle.getBBox();
+  const dx = bounds.width;
+  const dy = bounds.height;
+  const x = bounds.x + dx / 2;
+  const y = bounds.y + dy / 2;
+  const scale = 0.5 / Math.max(dx /600, dy / 600)
+  const translate = [300 - scale * x, 300 - scale * y];
+  
+
+  svg.transition()
+    .duration(500)
+    .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+    
+//
+
+
+
+//Bohne（ボーネ）
+  for(i=0;i<4;i++){
+
+  const bean=svg.append("text")
+        .attr("x",dx+i*30-3)
+        .attr("y", dy-50)
+        .style("font-family", "Grmfont")//フォント
+        .style("font-size", "15px")//大きさ
+        .text(lunetext[i])
+        .attr("fill", "green")
+        .attr("class", "ccc");
+
+  const ccc=svg.append("rect")
+        .attr("x",dx+i*30-10)
+        .attr("y",dy-70)
+        .attr("width", 30)
+        .attr("height",28)
+        .attr("rx",0)
+        .attr("ry",0)
+        .attr("fill", "white")
+        .attr("class", "bbb")
+        .style("opacity",0.5) 
+        .on("mouseenter",Bon)
+        .on("mouseleave",Bout)
+
+      
+  }
+
 
 console.log(sgg);
 }
