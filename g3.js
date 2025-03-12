@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.99;//ver修正を書き込みやすいように
+    const Vr=0.995;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -19,7 +19,10 @@
     let pilaB = [];
     let data1=[];
     let data3=[];
+    let satzK=[];
     
+    let fsgg="";
+    let kotei=-1;
     let z=0;
     let index=0;
     let xx=0;
@@ -130,7 +133,9 @@ svg.append("text")
 
  // ズームイベントの処理
     function zoomed(event) {
-      g.attr("transform", event.transform);
+      if(kotei==-1){
+            g.attr("transform", event.transform);
+      }
     }
     
 
@@ -156,7 +161,9 @@ function addSmallCircles(flag) {
         .style("font-family", "Grmfont")//フォント
         .style("font-size", "20px")//大きさ
         .text(mW)
-        .attr("fill", "green");
+        .attr("fill", "green")
+        .attr("id","s"+index) 
+        satzK[index]=mW;
 
   //メーレ前に■
    svg.append("rect")
@@ -200,6 +207,8 @@ function addSmallCircles(flag) {
 //ドラッグイベント
       .call(d3.drag()
       	.on("drag", function (event) {
+          svg.selectAll(".bbb").remove();
+          svg.selectAll(".ccc").remove();
           d3.select(this).attr("fill", "green").attr("cx", event.x).attr("cy", event.y);
           line.attr("x2", event.x).attr("y2", event.y);
           sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
@@ -255,6 +264,7 @@ const mrect = svg.append("rect")
 //ドラッグ終了処理        
         .on("end", function (event) {
        ksng=0;
+       kotei=-1;
         opt=0.2;
         d3.select(this).attr("fill", "black");
         
@@ -505,8 +515,10 @@ data2=data2.replace('y',' ');
     index=0;
     coy=40;
     Ccircle .attr("y", coy+10);
+ kotei=-1;
 
 //その他全消去
+    svg.selectAll(".stk").remove();
     svg.selectAll(".bbb").remove();
     svg.selectAll(".ccc").remove();
 svg.selectAll(".erase").remove()
@@ -568,6 +580,9 @@ function D3SVG4(set,k,x,y,x2,y2,Ctable,nakaC,sotoC,sotoW,r){
   }
 
 function Gmenu(){
+kotei=-1;
+zoomed;
+    svg.selectAll(".stk").remove();
     svg.selectAll(".bbb").remove();
     svg.selectAll(".ccc").remove();
     svg.selectAll(".stz").style("opacity",opt);    
@@ -588,11 +603,13 @@ const sgg="#c"+selectS;
   const scale = 0.5 / Math.max(dx /600, dy / 600)
   const translate = [300 - scale * x, 300 - scale * y];
   
-
+//二度打ち防止
+if (fsgg==""){
   svg.transition()
     .duration(500)
     .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
-    
+    fsgg=sgg;
+    }
 //
 
 
@@ -619,8 +636,10 @@ const sgg="#c"+selectS;
         .attr("fill", "white")
         .attr("class", "bbb")
         .style("opacity",0.5) 
+         .attr("id", "s"+i)
         .on("mouseenter",Bon)
         .on("mouseleave",Bout)
+        .on("click",Bck)
 
       
   }
@@ -629,7 +648,7 @@ const sgg="#c"+selectS;
 console.log(sgg);
 }
 function Gleave(){
-
+fsgg="";
 }
 
 function Bon(){
@@ -644,4 +663,68 @@ function Bout(){
       .attr("fill", "white")
       .attr("rx",0)
       .attr("ry",0);
+}
+
+function Bck(){
+    svg.selectAll(".bbb").remove();
+    svg.selectAll(".ccc").remove();
+    svg.selectAll(".stk").remove();
+kotei=0;
+const str= d3.select(this).attr("id") //
+const Xi = str.substring(1);//数字だけとる
+//satzK[ii]=lunetext[Xi]
+
+
+//const svg = d3.select("svg");
+const radius = 200;
+const handleRadius = 50;
+const handlePositions = 6;
+let currentValue = 0;
+
+// 円の描画
+svg.append("circle")
+  .attr("cx", 300)
+  .attr("cy", 250)
+  .attr("r", radius)
+  .style("fill", "white")
+  .style("stroke", "green")
+  .style("stroke-width", 2)
+   .attr("class","stk");
+  
+// 数字の描画
+  const suji=svg.append("text")
+        .attr("x",300)
+        .attr("y", 250)
+        .style("font-family", "Grmfont")//フォント
+        .style("font-size", "20px")//大きさ
+        .text(currentValue)
+        .attr("fill", "black")
+         .attr("class","stk");
+
+// ハンドルの描画
+const angle = currentValue * 60 * Math.PI / 180;
+  const x1 = 300 + radius * Math.cos(angle)*0.7;
+  const y1 = 300 + radius * Math.sin(angle)*0.7;
+  
+const handle = svg.append("circle")
+  .attr("r", handleRadius)
+  .style("fill", "green")
+ .attr("cx",x1).attr("cy", y1)
+ .attr("class","stk")
+    .on("mouseover",function (){
+          currentValue++;
+  if (currentValue >5) {
+    currentValue = 0;
+  }
+// ハンドルのドラッグイベント処理
+const angle = currentValue * 60 * Math.PI / 180;
+  const x1 = 300 + radius * Math.cos(angle)*0.7;
+  const y1 = 250 + radius * Math.sin(angle)*0.7;
+  handle.attr("cx", x1).attr("cy", y1);
+  suji.text(currentValue);
+  
+});
+
+//satz魔法円内容変更
+
 }
