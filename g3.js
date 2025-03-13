@@ -131,6 +131,9 @@ svg.append("text")
 // ズーム動作をグループ要素に適用
     svg.call(zoom);
 
+
+
+
  // ズームイベントの処理
     function zoomed(event) {
       if(kotei==-1){
@@ -711,7 +714,7 @@ const handle = svg.append("circle")
   .style("fill", "green")
  .attr("cx",x1).attr("cy", y1)
  .attr("class","stk")
-    .on("mouseover",function (){
+ .on("mouseover",function (){
           currentValue++;
   if (currentValue >5) {
     currentValue = 0;
@@ -725,6 +728,35 @@ const angle = currentValue * 60 * Math.PI / 180;
   
 });
 
-//satz魔法円内容変更
+//ホイール処理（ズームオフ）
+
+document.addEventListener("wheel", function(event) {
+      const ew=event.wheelDelta;
+        if (ew<0){
+        currentValue++;
+        }else{
+        currentValue--;
+        }
+console.log(ew);
+    
+      
+//数字調整
+
+  if (currentValue >5) {
+    currentValue = 0;
+  }
+  
+   if (currentValue <0) {
+    currentValue = 5;
+  } 
+      
+      
+  const angle = currentValue * 60 * Math.PI / 180;
+  const x1 = 300 + radius * Math.cos(angle)*0.7;
+  const y1 = 250 + radius * Math.sin(angle)*0.7;
+  handle.attr("cx", x1).attr("cy", y1);
+  suji.text(currentValue);
+  
+      });
 
 }
