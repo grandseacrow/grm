@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.995;//ver修正を書き込みやすいように
+    const Vr=0.996;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -13,6 +13,27 @@
     const Ctable=["none","green","white","gray","black"];
 		const lunetext= ["♈","♀","♎","☆"];
 
+//grm
+const Grm = {
+      s00:	{Gr3:"♐",	mere:"エコー"},		//print
+      s01:	{Gr3:"♋",	mere:"ループ"},		//for
+      s02:	{Gr3:"♒",	mere:"ピック"},		//select
+      s03:	{Gr3:"♓",	mere:"リスト"},		//case
+      s04:	{Gr3:"♈",	mere:"エンド"},		//break
+      s05:	{Gr3:"♉",	mere:"ホーム"},		//return
+      s10:	{Gr3:"♀",	mere:"モジ"},		//文字関数
+      s11:	{Gr3:"♂",	mere:"カズ"},		//数字関数
+      s12:	{Gr3:"＆",	mere:"カツ"},		//and
+      s13:	{Gr3:"♊",	mere:"マタ"},		//or
+      s14:	{Gr3:"♍",	mere:"アレ"},		//配列変数
+      s15:	{Gr3:"♌",	mere:"コメ"},		//コメント文
+      s20:	{Gr3:"♎",	mere:"イフ"},		//if
+      s21:	{Gr3:"♑",	mere:"エルス"},		//else
+      s22:	{Gr3:"＝",	mere:"＝"},		//＝
+      s23:	{Gr3:"＞",	mere:"＞"},		//＞
+      s24:	{Gr3:"＜",	mere:"＜"},		//＜
+      s25:	{Gr3:"！",	mere:"！"},		//NOT
+      }
 
     let outerRadius = 200;
     let smallCircles = [];
@@ -22,6 +43,7 @@
     let satzK=[];
     
     let fsgg="";
+    let gr=""
     let kotei=-1;
     let z=0;
     let index=0;
@@ -34,6 +56,7 @@
     let opt=0.1;
     let bflag=0;
     let selectS=0;
+    
 
 
 // SVG 要素を追加
@@ -674,8 +697,8 @@ function Bck(){
     svg.selectAll(".stk").remove();
 kotei=0;
 const str= d3.select(this).attr("id") //
-const Xi = str.substring(1);//数字だけとる
-//satzK[ii]=lunetext[Xi]
+//const Xi = str.substring(1);//数字だけとる
+
 
 
 //const svg = d3.select("svg");
@@ -695,12 +718,14 @@ svg.append("circle")
    .attr("class","stk");
   
 // 数字の描画
+
+gr=Grm[str+currentValue]["Gr3"];
   const suji=svg.append("text")
-        .attr("x",300)
-        .attr("y", 250)
+        .attr("x",250)
+        .attr("y", 290)
         .style("font-family", "Grmfont")//フォント
-        .style("font-size", "20px")//大きさ
-        .text(currentValue)
+        .style("font-size", "100px")//大きさ
+        .text(gr)
         .attr("fill", "black")
          .attr("class","stk");
 
@@ -724,7 +749,9 @@ const angle = currentValue * 60 * Math.PI / 180;
   const x1 = 300 + radius * Math.cos(angle)*0.7;
   const y1 = 250 + radius * Math.sin(angle)*0.7;
   handle.attr("cx", x1).attr("cy", y1);
-  suji.text(currentValue);
+  console.log(str+currentValue);
+  gr=Grm[str+currentValue]["Gr3"];
+  suji.text(gr);
   
 });
 
@@ -755,7 +782,8 @@ console.log(ew);
   const x1 = 300 + radius * Math.cos(angle)*0.7;
   const y1 = 250 + radius * Math.sin(angle)*0.7;
   handle.attr("cx", x1).attr("cy", y1);
-  suji.text(currentValue);
+   gr= Grm[str+currentValue]["Gr3"];
+  suji.text(gr);
   
       });
 
