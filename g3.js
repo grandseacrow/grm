@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.996;//ver修正を書き込みやすいように
+    const Vr=0.997;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -44,6 +44,7 @@ const Grm = {
     
     let fsgg="";
     let gr=""
+    let gt="";
     let kotei=-1;
     let z=0;
     let index=0;
@@ -188,7 +189,7 @@ function addSmallCircles(flag) {
         .style("font-size", "20px")//大きさ
         .text(mW)
         .attr("fill", "green")
-        .attr("id","s"+index) 
+        .attr("id","t"+index) 
         satzK[index]=mW;
 
   //メーレ前に■
@@ -651,6 +652,7 @@ if (fsgg==""){
         .text(lunetext[i])
         .attr("fill", "green")
         .attr("class", "ccc");
+        
 
   const ccc=svg.append("rect")
         .attr("x",dx+i*30-10)
@@ -662,7 +664,7 @@ if (fsgg==""){
         .attr("fill", "white")
         .attr("class", "bbb")
         .style("opacity",0.5) 
-         .attr("id", "s"+i)
+         .attr("id", "s"+i+"t"+selectS)//二重ID　#s (i)t(selectS) 
         .on("mouseenter",Bon)
         .on("mouseleave",Bout)
         .on("click",Bck)
@@ -692,11 +694,14 @@ function Bout(){
 }
 
 function Bck(){
+const gtr= d3.select(this).attr("id") //
+console.log(gtr);
     svg.selectAll(".bbb").remove();
     svg.selectAll(".ccc").remove();
     svg.selectAll(".stk").remove();
 kotei=0;
-const str= d3.select(this).attr("id") //
+const str= gtr.slice(0, 2)//頭の二文字だけ使う
+const tst= gtr.slice(2)//頭の二文字とる
 //const Xi = str.substring(1);//数字だけとる
 
 
@@ -745,14 +750,16 @@ const handle = svg.append("circle")
     currentValue = 0;
   }
 // ハンドルのドラッグイベント処理
-const angle = currentValue * 60 * Math.PI / 180;
-  const x1 = 300 + radius * Math.cos(angle)*0.7;
-  const y1 = 250 + radius * Math.sin(angle)*0.7;
-  handle.attr("cx", x1).attr("cy", y1);
-  console.log(str+currentValue);
-  gr=Grm[str+currentValue]["Gr3"];
-  suji.text(gr);
-  
+   const angle = currentValue * 60 * Math.PI / 180;
+   const x1 = 300 + radius * Math.cos(angle)*0.7;
+   const y1 = 250 + radius * Math.sin(angle)*0.7;
+   handle.attr("cx", x1).attr("cy", y1);
+   console.log(str+currentValue);
+   gr=Grm[str+currentValue]["Gr3"];
+   suji.text(gr);
+   gt=Grm[str+currentValue]["mere"];
+ 		 svg.select("#"+tst).text(gt+"{");
+
 });
 
 //ホイール処理（ズームオフ）
@@ -764,7 +771,7 @@ document.addEventListener("wheel", function(event) {
         }else{
         currentValue--;
         }
-console.log(ew);
+
     
       
 //数字調整
@@ -778,12 +785,16 @@ console.log(ew);
   } 
       
       
-  const angle = currentValue * 60 * Math.PI / 180;
-  const x1 = 300 + radius * Math.cos(angle)*0.7;
-  const y1 = 250 + radius * Math.sin(angle)*0.7;
-  handle.attr("cx", x1).attr("cy", y1);
-   gr= Grm[str+currentValue]["Gr3"];
-  suji.text(gr);
+    const angle = currentValue * 60 * Math.PI / 180;
+    const x1 = 300 + radius * Math.cos(angle)*0.7;
+    const y1 = 250 + radius * Math.sin(angle)*0.7;
+    handle.attr("cx", x1).attr("cy", y1);
+    gr= Grm[str+currentValue]["Gr3"];
+    suji.text(gr);
+    console.log(selectS);
+    gt=Grm[str+currentValue]["mere"];
+ 		 svg.select("#"+tst).text(gt+"{");
+  
   
       });
 
