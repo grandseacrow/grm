@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.997;//ver修正を書き込みやすいように
+    const Vr=0.998;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -57,6 +57,7 @@ const Grm = {
     let opt=0.1;
     let bflag=0;
     let selectS=0;
+    let flag=0;
     
 
 
@@ -80,9 +81,16 @@ D3SVG2(svg,0,450,460,"gr3.js Ver"+Vr,Ctable,1);
     const lineGroup = g.append("g")
       .lower();
      
-
 // メイン魔法円を描画
 const largeCircle = D3SVG2(g,1,250,250,200,Ctable,4,1,2);
+
+//捨てpila 順番入れ替え、メイン魔法陣の前に
+		const path = g.append("path")
+      .attr("d", "M250 250")
+      .attr("stroke", "white") // 線の色
+      .attr("fill", "none") // 線の幅
+  		.attr("stroke-width", 10); // 線の幅
+
 //外部SVG魔法陣
 d3.xml("key.svg").then(function(xml) {
   const defs = g.append("defs");
@@ -99,12 +107,7 @@ const MOYO= g.append("use")
 
 
 
-//捨てpila 順番入れ替え、メイン魔法陣の前に
-		const path = g.append("path")
-      .attr("d", "M250 250")
-      .attr("stroke", "white") // 線の色
-      .attr("fill", "none") // 線の幅
-  		.attr("stroke-width", 10); // 線の幅
+
 
 //枠
 
@@ -126,8 +129,8 @@ svg.append("text")
   .text(mW)
   .attr("fill", "green"); // クラスを追加
 
-
-
+//魔法円　初期化
+circleinit();
 
 //■カーソル（初期）
 
@@ -169,7 +172,7 @@ svg.append("text")
 
 
 //サブ魔法円追加　関数
-function addSmallCircles(flag) {
+function addSmallCircles(flag,loadX,loadY) {
 
       const maxOuterCircles = 6;
       coy=coy+30;
@@ -222,109 +225,50 @@ function addSmallCircles(flag) {
 
 
 //サブ魔法円表示メイン
-      const smallCircle = g.append("circle")
+if (flag==1){
+      g.select("#c"+index)
+      .attr("cx", loadX)
+      .attr("cy", loadY)
+}else{
+      g.select("#c"+index)
       .attr("cx", newX)
       .attr("cy", newY)
+}
+
+      g.select("#c"+index)
       .attr("r", radiusB+index)
       .attr("fill", "black")
       .attr("stroke", "green")     
-      .attr("stroke-width", 2) 
-      .attr("id","c"+index) 
-      
-//ドラッグイベント
-      .call(d3.drag()
-      	.on("drag", function (event) {
-          svg.selectAll(".bbb").remove();
-          svg.selectAll(".ccc").remove();
-          d3.select(this).attr("fill", "green").attr("cx", event.x).attr("cy", event.y);
-          line.attr("x2", event.x).attr("y2", event.y);
-          sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
-          if(index>1){
-           const cf=smallCircles[0];//魔法円最初
-          const pf=pilaB[0];//pira最初
-          let pilaW=`M${cf.xx} ${cf.yy} Q ${pf.xx} ${pf.yy}`;
-              
-          for(let i=0;i<smallCircles.length-1;i++){
-           const ct=smallCircles[i];//魔法円途中
-           const pt=pilaB[i];//pila円途中
-             if (i>0){
-             pilaW=pilaW+` ${ct.xx} ${ct.yy} ${pt.xx} ${pt.yy}`;
-             }
-    
-           }
-           
-          const ce=smallCircles[smallCircles.length-1];	//魔法円最後
-          pilaW=pilaW+` ${ce.xx} ${ce.yy}`;
-    				path.attr("d", pilaW);
-
-          }
-
-
-
-
-//サブ魔法円位置更新                        
-          const idS=d3.select(this).attr("r") -radiusB;
-          xx=event.x;
-          yy=event.y;
-          smallCircles.splice(idS,0);
-          smallCircles.splice(idS,1,{xx,yy,smallCircle});
-          
-//メーレ側の該当箇所を四角で囲む 
-if(ksng>0){
-opt=0;
-}
-ksng=1;
-const mrect = svg.append("rect")
-                    .attr("x", 630)
-                    .attr("y", idS*30+55)
-                    .attr("rx",10)
-                    .attr("ry",10)
-                    .attr("width", cow)
-                    .attr("height", 30)                   
-                    .attr("stroke", "green") 
-                    .attr("stroke-width",3)
-                    .attr("fill", "green") 
-					.attr("class", "mrect") 
-                    .style("opacity",opt);
-        })
-        
-//ドラッグ終了処理        
-        .on("end", function (event) {
-       ksng=0;
-       kotei=-1;
-        opt=0.2;
-        d3.select(this).attr("fill", "black");
-        
-        const sgg="#c"+selectS;
-    g.selectAll(sgg).attr("fill", "white");
-    
-        selectS
-        sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px").attr("fill", "green");
-        svg.selectAll(".mrect").remove()
-      	})
-
-           );
-
+      .attr("stroke-width", 2)       
 //番号付与
                     
-      const sno=g.append("text")
-      .attr("x", newX)
-      .attr("y", newY-radiusB-index-10)
-      .attr("fill", "green")
-      .style("font-size", "10px")//大きさ
-      .text(nan[index]);
+//      g.select("#sno"+index)
+     // .attr("x", newX)
+     // .attr("y", newY-radiusB-index-10)
+      //.attr("fill", "green")
+    //  .style("font-size", "10px")//大きさ
+  //    .text(nan[index]);
 
 
                     
 //Mistel（ミステル）表示                      
-                const line = lineGroup.append("line")
+  if (flag==1){
+  lineGroup.select("#l"+index)
+      .attr("x2", loadX)
+      .attr("y2", loadY)
+}else{
+  lineGroup.select("#l"+index)
+      .attr("x2", newX)
+      .attr("y2", newY)
+}
+
+  lineGroup.select("#l"+index)
                     .attr("x1", centerX)
                     .attr("y1", centerY)
-                    .attr("x2", newX)
-                    .attr("y2", newY)
-							      .attr("stroke", "green")      
+         			      .attr("stroke", "green")      
 							      .attr("stroke-width", 20);     
-                    
+  
+  
 //魔法円が１個以上表示されたら                 
 		if(smallCircles.length>0){
              const prev=smallCircles[smallCircles.length-1]
@@ -374,14 +318,14 @@ const mrect = svg.append("rect")
 
 
             
-                       const no=g.append("text")
-                      .attr("x", pbx+12+index)
-                      .attr("y", pby)
-                      .attr("fill", "gray")
-                      .style("font-size", "8px")//大きさ
-                      .text(nan[index])
-                      .style("user-select","none");//変数処理
-
+                 //      const no=g.append("text")
+                     // .attr("x", pbx+12+index)
+                      //.attr("y", pby)
+                      //.attr("fill", "gray")
+                     // .style("font-size", "8px")//大きさ
+                     // .text(nan[index])
+                     // .style("user-select","none");//変数処理
+//
 
             
             xx=pbx;
@@ -393,7 +337,7 @@ const mrect = svg.append("rect")
      
             xx=newX;
             yy=newY;
-            smallCircles.push({xx,yy,smallCircle});
+            smallCircles.push({xx,yy});
 
 
            
@@ -449,28 +393,24 @@ d3.select(".mess").property("value", data);
 }
  );
 
-
+//data かきこみ
  d3.select(".kaku").on("click",function(){
  zenkes();
-
+ circleinit();
+flag=1;
  const data=d3.select(".mess").property("value");
 //@で分割
 let data2="";
 data1=data.split("@");  
 //data2=data2+"*"+data1[1];
 const str=data1[1];
-const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
+const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
 const xx = numbers[0]; 
 const yy = numbers[1]; 
+console.log(xx,yy);
 
-      const smallCircle = g.append("circle")
-      .attr("cx", xx)
-      .attr("cy", yy)
-      .attr("r", radiusB)
-      .attr("fill", "black")
-      .attr("stroke", "green")     
-      .attr("stroke-width", 2) ;
-      smallCircles.push({xx,yy,smallCircle});
+addSmallCircles(flag,xx,yy)    
+      smallCircles.push({xx,yy});
 
 
 //1個目円位置
@@ -484,19 +424,12 @@ datax=datax.replace('y',' ');
 if(data1.length>2){
   for(i=2;i<data1.length-2;i++){
 const str=data1[i];
-const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
+const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
 const xx = numbers[0]; 
-const yy = numbers[1]; 
-addSmallCircles(1);
+const yy = numbers[1];
 
-      const smallCircle = g.append("circle")
-      .attr("cx", xx)
-      .attr("cy", yy)
-      .attr("r", radiusB+index-1)
-      .attr("fill", "black")
-      .attr("stroke", "green")     
-      .attr("stroke-width", 2) ;
-      smallCircles.push({xx,yy,smallCircle});
+ addSmallCircles(flag,xx,yy)    
+      smallCircles.push({xx,yy});
 
   data2=data2+data1[i];
   data2=data2.replace('Sx',' ');
@@ -508,11 +441,10 @@ addSmallCircles(1);
 }
   if (data1.length>3){
 const str=data1[data1.length-2];
-const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
+const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
 const xx = numbers[0]; 
 const yy = numbers[1]; 
 
- addSmallCircles(1);
 
   data2=data2+data1[data1.length-2]
     data2=data2.replace('Sx',' ');
@@ -527,14 +459,13 @@ data2=data2.replace('y',' ');
     d3.select(".mess").property("value", data2);
 
 }
+
  );
 
  function zenkes(){
- for(i=0;i<smallCircles.length;i++){
-  smallCircles[i].smallCircle.remove();
-  }
-//捨てPila再配置
- path.attr("d", "M250 250");
+ //for(i=0;i<smallCircles.length;i++){
+ // smallCircles[i].smallCircle.remove();
+ // }
 //変数初期化
     smallCircles = [];
     pilaB = [];
@@ -551,9 +482,11 @@ data2=data2.replace('y',' ');
 svg.selectAll(".erase").remove()
 g.selectAll("line").remove(); 
 g.selectAll("rect").remove(); 
-g.selectAll("text").remove(); 
+g.selectAll("text").remove();
+g.selectAll(".small").remove();
+ path.attr("d", "M250 250")
 svg.call(zoom.transform, d3.zoomIdentity);
-
+circleinit();
  }
 
 function D3SVG2(set,k,x,y,etc,Ctable,nakaC,sotoC,sotoW){
@@ -797,5 +730,97 @@ document.addEventListener("wheel", function(event) {
   
   
       });
+
+}
+
+function circleinit(){
+
+
+      
+  for(k=0;k<12;k++){
+       const line = lineGroup.append("line")
+        .attr("id","l"+k) 
+       const smallCircle = g.append("circle")
+        .attr("id","c"+k)
+        .attr("class","small")
+         //      const sno = g.append("text")
+        //.attr("id","sno"+k)
+
+        //ドラッグイベント
+      .call(d3.drag()
+      	.on("drag", function (event) {
+          svg.selectAll(".bbb").remove();
+          svg.selectAll(".ccc").remove();
+          d3.select(this).attr("fill", "green").attr("cx", event.x).attr("cy", event.y);
+          line.attr("x2", event.x).attr("y2", event.y);
+ //         sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
+          if(index>1){
+           const cf=smallCircles[0];//魔法円最初
+          const pf=pilaB[0];//pira最初
+          let pilaW=`M${cf.xx} ${cf.yy} Q ${pf.xx} ${pf.yy}`;
+              
+          for(let i=0;i<smallCircles.length-1;i++){
+           const ct=smallCircles[i];//魔法円途中
+           const pt=pilaB[i];//pila円途中
+             if (i>0){
+             pilaW=pilaW+` ${ct.xx} ${ct.yy} ${pt.xx} ${pt.yy}`;
+             }
+    
+           }
+           
+          const ce=smallCircles[smallCircles.length-1];	//魔法円最後
+          pilaW=pilaW+` ${ce.xx} ${ce.yy}`;
+    				path.attr("d", pilaW);
+
+          }
+
+
+
+
+//サブ魔法円位置更新                        
+          const idS=d3.select(this).attr("r") -radiusB;
+          xx=event.x;
+          yy=event.y;
+          smallCircles.splice(idS,0);
+          smallCircles.splice(idS,1,{xx,yy});
+          
+//メーレ側の該当箇所を四角で囲む 
+if(ksng>0){
+opt=0;
+}
+ksng=1;
+const mrect = svg.append("rect")
+                    .attr("x", 630)
+                    .attr("y", idS*30+55)
+                    .attr("rx",10)
+                    .attr("ry",10)
+                    .attr("width", cow)
+                    .attr("height", 30)                   
+                    .attr("stroke", "green") 
+                    .attr("stroke-width",3)
+                    .attr("fill", "green") 
+					.attr("class", "mrect") 
+                    .style("opacity",opt);
+        })
+        
+//ドラッグ終了処理        
+        .on("end", function (event) {
+       ksng=0;
+       kotei=-1;
+        opt=0.2;
+        d3.select(this).attr("fill", "black");
+        
+        const sgg="#c"+selectS;
+    g.selectAll(sgg).attr("fill", "white");
+   
+//        sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px").attr("fill", "green");
+        svg.selectAll(".mrect").remove()
+      	})
+
+           );
+
+
+  }
+
 
 }
