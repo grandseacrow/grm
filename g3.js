@@ -287,7 +287,7 @@ if (flag==1){
                     .call(d3.drag().on("drag", function (event) {
                         d3.select(this).attr("x", event.x).attr("y", event.y);
                        const idS=d3.select(this).attr("width")-10-1;                    
-                     no.attr("x", event.x+12+idS).attr("y", event.y);
+                     //no.attr("x", event.x+12+idS).attr("y", event.y);
 
                     xx=event.x;
                     yy=event.y;
