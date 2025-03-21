@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.998;//ver修正を書き込みやすいように
+    const Vr=0.9987;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -235,19 +235,32 @@ if (flag==1){
       .attr("cy", newY)
 }
 
-      g.select("#c"+index)
-      .attr("r", radiusB+index)
-      .attr("fill", "black")
-      .attr("stroke", "green")     
-      .attr("stroke-width", 2)       
-//番号付与
-                    
-//      g.select("#sno"+index)
-     // .attr("x", newX)
-     // .attr("y", newY-radiusB-index-10)
-      //.attr("fill", "green")
-    //  .style("font-size", "10px")//大きさ
-  //    .text(nan[index]);
+  g.select("#c"+index)
+    .attr("r", radiusB+index)
+    .attr("fill", "black")
+    .attr("stroke", "green")     
+    .attr("stroke-width", 2)       
+    
+  //番号付与
+const ind="sc"+index;
+console.log(ind);
+       const sno = g.append("text")
+       .attr("id",ind)
+       .attr("fill", "green")
+       .style("font-size", "10px")//大きさ
+       .text(nan[index]);
+console.log(ind);
+ if (flag==1){
+    sno.attr("x", loadX)
+      .attr("y", loadY-radiusB-index-10);
+
+    }else{
+      sno.attr("x", newX)
+        .attr("y", newY-radiusB-index-10);
+      
+      }
+   
+  
 
 
                     
@@ -279,15 +292,18 @@ if (flag==1){
              const pby = centerY + outerRadius * Math.sin(angle2);
 //Pila-B表示  
 		 	     	const pila = g.append("rect")
-                    .attr("x", pbx)
-                    .attr("y", pby)
                     .attr("width", 10+index)
                     .attr("height", 10+index)                   
                     .attr("fill", "grey") 
+
                     .call(d3.drag().on("drag", function (event) {
                         d3.select(this).attr("x", event.x).attr("y", event.y);
-                       const idS=d3.select(this).attr("width")-10-1;                    
-                     //no.attr("x", event.x+12+idS).attr("y", event.y);
+                       const idS=d3.select(this).attr("width")-10-1;            
+                       
+                       
+
+          
+                     no.attr("x", event.x+12+idS).attr("y", event.y);
 
                     xx=event.x;
                     yy=event.y;
@@ -311,39 +327,61 @@ if (flag==1){
           const ce=smallCircles[smallCircles.length-1];	//魔法円最後
           pilaW=pilaW+` ${ce.xx} ${ce.yy}`;
     				path.attr("d", pilaW);
-         console.log(pilaW)   
+ 
               //    
                   
                     }))
 
+            const no=g.append("text")
+            .attr("fill", "gray")
+            .style("font-size", "8px")//大きさ
+            .style("user-select","none");//変数処理
 
-            
-                 //      const no=g.append("text")
-                     // .attr("x", pbx+12+index)
-                      //.attr("y", pby)
-                      //.attr("fill", "gray")
-                     // .style("font-size", "8px")//大きさ
-                     // .text(nan[index])
-                     // .style("user-select","none");//変数処理
+
+ if (flag==1){
+ const pbb=pilaB[index-1];
+
+   pila.attr("x",  pbb.xx)
+      .attr("y",  pbb.yy);
+      
+ //  no.attr("x", pbb.xx+12+index-1)
+//      .attr("y", pbb.yy)
+//      .text(nan[index-1]);
+
+}else{
+   pila
+  .attr("x", pbx)
+    .attr("y", pby);
+    
+   no.attr("x", pbx+12+index)
+      .attr("y", pby)
+       .text(nan[index-1]);
+     xx=pbx;
+    yy=pby;
+    pilaB.push({xx,yy});
+}
+
+
 //
 
-            
-            xx=pbx;
-            yy=pby;
-            pilaB.push({xx,yy});
-
-
+           
       }
-     
+      if (flag==1){
+          	xx=loadX;
+            yy=loadY; 
+            smallCircles.push({xx,yy});
+            }else{
             xx=newX;
             yy=newY;
             smallCircles.push({xx,yy});
+            
+            }
 
 
            
 //pila書き込み（直描き）
 
-    if (index>0){
+    if (index>0 && flag!=1){
          const cf=smallCircles[0];//魔法円最初
           const pf=pilaB[0];//pira最初
           let pilaW=`M${cf.xx} ${cf.yy} Q ${pf.xx} ${pf.yy}`;
@@ -360,7 +398,7 @@ if (flag==1){
           const ce=smallCircles[smallCircles.length-1];	//魔法円最後
           pilaW=pilaW+` ${ce.xx} ${ce.yy}`;
     				path.attr("d", pilaW);
-         console.log(pilaW)   
+
         }
          //
     
@@ -368,7 +406,7 @@ if (flag==1){
 }
         
         
-//サブ魔法円消す        
+//けす        
 d3.select(".clearButton").on("click",function(){
   zenkes();
 //test
@@ -393,10 +431,10 @@ d3.select(".mess").property("value", data);
 }
  );
 
+
 //data かきこみ
  d3.select(".kaku").on("click",function(){
  zenkes();
- circleinit();
 flag=1;
  const data=d3.select(".mess").property("value");
 //@で分割
@@ -405,12 +443,21 @@ data1=data.split("@");
 //data2=data2+"*"+data1[1];
 const str=data1[1];
 const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
-const xx = numbers[0]; 
-const yy = numbers[1]; 
-console.log(xx,yy);
 
+if(numbers.length>2){
+const ppx=numbers[2];
+const ppy=numbers[3];
+xx = ppx; 
+yy = ppy;
+ console.log(xx,yy);
+    pilaB.push({xx,yy});
+}
+
+ xx = numbers[0]; 
+ yy = numbers[1];
+ console.log(xx,yy);
 addSmallCircles(flag,xx,yy)    
-      smallCircles.push({xx,yy});
+
 
 
 //1個目円位置
@@ -424,12 +471,25 @@ datax=datax.replace('y',' ');
 if(data1.length>2){
   for(i=2;i<data1.length-2;i++){
 const str=data1[i];
+
 const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
-const xx = numbers[0]; 
-const yy = numbers[1];
+
+
+if(numbers.length>2){
+
+const pbx=numbers[2];
+const pby=numbers[3];
+xx = pbx; 
+yy = pby;
+
+    pilaB.push({xx,yy});
+}
+
+ xx = numbers[0]; 
+ yy = numbers[1];
+
 
  addSmallCircles(flag,xx,yy)    
-      smallCircles.push({xx,yy});
 
   data2=data2+data1[i];
   data2=data2.replace('Sx',' ');
@@ -439,23 +499,28 @@ const yy = numbers[1];
 
   }
 }
+
   if (data1.length>3){
 const str=data1[data1.length-2];
 const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
-const xx = numbers[0]; 
-const yy = numbers[1]; 
+xx = numbers[0]; 
+yy = numbers[1]; 
 
 
   data2=data2+data1[data1.length-2]
     data2=data2.replace('Sx',' ');
 data2=data2.replace('y',' ');
+
+ addSmallCircles(flag,xx,yy)    
+
+
   }
 
    data2=data2.replace('Sx',' ');
    data2=data2.replace('y',' ');
 
   data2=datax+data2;
-   path.attr("d", data2);
+  path.attr("d", data2);
     d3.select(".mess").property("value", data2);
 
 }
@@ -463,9 +528,7 @@ data2=data2.replace('y',' ');
  );
 
  function zenkes(){
- //for(i=0;i<smallCircles.length;i++){
- // smallCircles[i].smallCircle.remove();
- // }
+
 //変数初期化
     smallCircles = [];
     pilaB = [];
@@ -743,8 +806,7 @@ function circleinit(){
        const smallCircle = g.append("circle")
         .attr("id","c"+k)
         .attr("class","small")
-         //      const sno = g.append("text")
-        //.attr("id","sno"+k)
+
 
         //ドラッグイベント
       .call(d3.drag()
@@ -753,7 +815,9 @@ function circleinit(){
           svg.selectAll(".ccc").remove();
           d3.select(this).attr("fill", "green").attr("cx", event.x).attr("cy", event.y);
           line.attr("x2", event.x).attr("y2", event.y);
- //         sno.attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
+          const snos= "#s"+d3.select(this).attr("id");
+           console.log(snos);
+   				svg.select(snos).attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
           if(index>1){
            const cf=smallCircles[0];//魔法円最初
           const pf=pilaB[0];//pira最初
@@ -812,8 +876,9 @@ const mrect = svg.append("rect")
         
         const sgg="#c"+selectS;
     g.selectAll(sgg).attr("fill", "white");
-   
-//        sno.attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px").attr("fill", "green");
+     const snos= "#s"+d3.select(this).attr("id");
+     console.log(snos);
+   svg.select(snos).attr("x", event.x).attr("y", event.y-radiusB-index-10).style("font-size", "10px").attr("fill", "green");
         svg.selectAll(".mrect").remove()
       	})
 
