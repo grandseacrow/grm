@@ -375,7 +375,7 @@ console.log(ind);
             smallCircles.push({xx,yy,lv,sh});
             }else{
               const lv=0;
-              const sh=0;
+              const sh="";
             xx=newX;
             yy=newY;
             console.log(lv)
@@ -704,7 +704,7 @@ console.log(gtr);
 kotei=0;
 const str= gtr.slice(0, 2)//頭の二文字だけ使う
 const tst= gtr.slice(2)//頭の二文字とる
-//const Xi = str.substring(1);//数字だけとる
+
 
 
 
@@ -726,15 +726,37 @@ svg.append("circle")
      .on("click",function(){
       svg.selectAll(".stk").remove();
       kotei=-1;
+
       //Kreisに色々追加
-      svg.append("text")
-        .attr("x",250)
-        .attr("y", 290)
+      const sen = tst.substring(1);//数字だけとる
+      const sxx=smallCircles[sen].xx
+			const syy=smallCircles[sen].yy
+      console.log(tst,sxx,syy);
+      const krs1=g.append("text")
+        .attr("x",sxx-90)
+        .attr("y", syy+90)
         .style("font-family", "Grmfont")//フォント
-        .style("font-size", "200px")//大きさ
-        .text("1")
+        .style("font-size", "180px")//大きさ
+        .text("①")
         .attr("fill", "green")
-         .attr("class","stk");
+          .attr("id","k1"+sen)
+         .attr("class","krs");
+  
+         smallCircles[sen].lv=1;
+  
+         
+        const krs2=g.append("text")
+        .attr("x",sxx-45)
+        .attr("y",syy+40)
+        .style("font-family", "Grmfont")//フォント
+        .style("font-size", "100px")//大きさ
+        .text(gr)
+        .attr("fill", "#00ff00")
+         .attr("id","k2"+sen)
+         .attr("class","krs");
+         smallCircles[sen].sh=gr;
+   
+         
   });
   
 // 数字の描画
@@ -769,11 +791,13 @@ const handle = svg.append("circle")
    const x1 = 300 + radius * Math.cos(angle)*0.7;
    const y1 = 250 + radius * Math.sin(angle)*0.7;
    handle.attr("cx", x1).attr("cy", y1);
-   console.log(str+currentValue);
+      gt=Grm[str+currentValue]["mere"];
+ 		 svg.select("#"+tst).text(gt+"{");
+     
    gr=Grm[str+currentValue]["Gr3"];
    suji.text(gr);
-   gt=Grm[str+currentValue]["mere"];
- 		 svg.select("#"+tst).text(gt+"{");
+   
+
 
 });
 
@@ -834,8 +858,16 @@ function circleinit(){
           svg.selectAll(".ccc").remove();
           d3.select(this).attr("fill", "green").attr("cx", event.x).attr("cy", event.y);
           line.attr("x2", event.x).attr("y2", event.y);
-          const snos= "#s"+d3.select(this).attr("id");
-           console.log(snos);
+          
+         const idk=+d3.select(this).attr("id");
+         const k1= "#k1"+idk;
+         const k2= "#k2"+idk;
+          svg.select(k1).attr("x",event.x).attr("y", event.y);
+          svg.select(k2).attr("x",event.x).attr("y", event.y);
+          
+
+          const snos= "#s"+idk;
+
    				svg.select(snos).attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
           if(index>1){
            const cf=smallCircles[0];//魔法円最初
