@@ -1,5 +1,5 @@
 const me= "mære";//文字化け修正が面倒なので
-const Vr=0.9994;//ver修正を書き込みやすいように
+const Vr=0.9996;//ver修正を書き込みやすいように
 let jf=0;
 jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -15,24 +15,23 @@ const lunetext= ["♈","♀","♎","☆"];
 
 //grm
 const Grm = {
-  s00:	{Gr3:"♐",	mere:"エコー"},		//print
-  s01:	{Gr3:"♋",	mere:"ループ"},		//for
-  s02:	{Gr3:"♒",	mere:"ピック"},		//select
-  s03:	{Gr3:"♓",	mere:"リスト"},		//case
-  s04:	{Gr3:"♈",	mere:"エンド"},		//break
-  s05:	{Gr3:"♉",	mere:"ホーム"},		//return
-  s10:	{Gr3:"♀",	mere:"モジ"},		//文字関数
-  s11:	{Gr3:"♂",	mere:"カズ"},		//数字関数
-  s12:	{Gr3:"＆",	mere:"カツ"},		//and
-  s13:	{Gr3:"♊",	mere:"マタ"},		//or
-  s14:	{Gr3:"♍",	mere:"アレ"},		//配列変数
-  s15:	{Gr3:"♌",	mere:"コメ"},		//コメント文
-  s20:	{Gr3:"♎",	mere:"イフ"},		//if
-  s21:	{Gr3:"♑",	mere:"エルス"},		//else
-  s22:	{Gr3:"＝",	mere:"＝"},		//＝
-  s23:	{Gr3:"＞",	mere:"＞"},		//＞
-  s24:	{Gr3:"＜",	mere:"＜"},		//＜
-  s25:	{Gr3:"！",	mere:"！"},		//NOT
+  s00:	{Gr3:"♐",	mere:"エコー",A:0},		//print
+  s01:	{Gr3:"♋",	mere:"ループ",A:3},		//for
+  s03:	{Gr3:"♓",	mere:"リスト",A:0},		//case
+  s04:	{Gr3:"♈",	mere:"エンド",A:0},		//break
+  s05:	{Gr3:"♉",	mere:"ホーム",A:0},		//return
+  s10:	{Gr3:"♀",	mere:"モジ",A:1},	//文字関数
+  s11:	{Gr3:"♂",	mere:"カズ",A:1},		//数字関数
+  s12:	{Gr3:"＆",	mere:"カツ",A:2},		//and
+  s13:	{Gr3:"♊",	mere:"マタ",A:2},		//or
+  s14:	{Gr3:"♍",	mere:"アレ",A:1},		//配列変数
+  s15:	{Gr3:"♌",	mere:"コメ",A:1},		//コメント文
+  s20:	{Gr3:"♎",	mere:"イフ",A:1},		//if
+  s21:	{Gr3:"♑",	mere:"エルス",A:0},		//else
+  s22:	{Gr3:"＝",	mere:"＝",A:1},		//＝
+  s23:	{Gr3:"＞",	mere:"＞",A:1},		//＞
+  s24:	{Gr3:"＜",	mere:"＜",A:1},		//＜
+  s25:	{Gr3:"！",	mere:"！",A:1},		//NOT
   }
 
 let outerRadius = 200;
@@ -41,7 +40,7 @@ let pilaB = [];
 let data1=[];
 let data3=[];
 let satzK=[];
-
+let gaa=0;
 let fsgg="";
 let gr=""
 let gt="";
@@ -785,47 +784,14 @@ handle.attr("cx", x1).attr("cy", y1);
   svg.select("#"+tst).text("{"+gt+"◖◀");
  
 gr=Grm[str+currentValue]["Gr3"];
-suji.text(gr);
-
+gaa= Grm[str+currentValue]["A"];
+suji.text(gr+":"+gaa)
 
 
 });
 
 //ホイール処理（ズームオフ）
 
-document.addEventListener("wheel", function(event) {
-  const ew=event.wheelDelta;
-    if (ew<0){
-    currentValue++;
-    }else{
-    currentValue--;
-    }
-
-
-  
-//数字調整
-
-if (currentValue >5) {
-currentValue = 0;
-}
-
-if (currentValue <0) {
-currentValue = 5;
-} 
-  
-  
-const angle = currentValue * 60 * Math.PI / 180;
-const x1 = 300 + radius * Math.cos(angle)*0.7;
-const y1 = 250 + radius * Math.sin(angle)*0.7;
-handle.attr("cx", x1).attr("cy", y1);
-gr= Grm[str+currentValue]["Gr3"];
-suji.text(gr);
-console.log(selectS);
-gt=Grm[str+currentValue]["mere"];
-  svg.select("#"+tst).text(gt+"{");
-
-
-  });
 
 }
 
@@ -863,7 +829,7 @@ if(insize.length>10){
 }
 });
 
-for(i=1;i<4;i++){
+for(i=1;i<gaa+1;i++){
 //const ii=1
 const zx=winx+zz*i;
 const zy=winy+(zz*2+5)*i;
