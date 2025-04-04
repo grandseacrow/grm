@@ -1,5 +1,5 @@
     const me= "mære";//文字化け修正が面倒なので
-    const Vr=0.9987;//ver修正を書き込みやすいように
+    const Vr=0.99935;//ver修正を書き込みやすいように
   let jf=0;
  jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -120,7 +120,7 @@ D3SVG2(svg,0,640,15,me,Ctable,1);
 
 
 //メーレ表示（テスト用）
-let mW="グリム{";
+let mW="グリム";
 svg.append("text")
   .attr("x", 640)
   .attr("y", coy+5)
@@ -183,7 +183,7 @@ function addSmallCircles(flag,loadX,loadY) {
   
 
   //メーレ追加（直書き）
-  mW=nan[index]+"(　){";
+  mW="{"+nan[index]+"◖";
       svg.append("text")
         .attr("x", 640)
         .attr("y", coy+4+jf)
@@ -307,9 +307,12 @@ console.log(ind);
 
                     xx=event.x;
                     yy=event.y;
+                    lv=0;
+                    sh=0;
+                    
     
                     pilaB.splice(idS,0);
-                    pilaB.splice(idS,1,{xx,yy});
+                    pilaB.splice(idS,1,{xx,yy,lv,sh});
           //        
           const cf=smallCircles[0];//魔法円最初
           const pf=pilaB[0];//pira最初
@@ -368,12 +371,15 @@ console.log(ind);
       }
       if (flag==1){
           	xx=loadX;
-            yy=loadY; 
-            smallCircles.push({xx,yy});
+            yy=loadY;
+            smallCircles.push({xx,yy,lv,sh});
             }else{
+              const lv=0;
+              const sh="";
             xx=newX;
             yy=newY;
-            smallCircles.push({xx,yy});
+            console.log(lv)
+            smallCircles.push({xx,yy,lv,sh});
             
             }
 
@@ -425,7 +431,10 @@ d3.select(".yomu").on("click",function(){
   data=data+"Px"+parseInt(pilaB[i].xx) +"y"+parseInt(pilaB[i].yy)+` `;
   }
 
-  data=data+"@Sx"+parseInt(smallCircles[smallCircles.length-1].xx)+"y"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed";
+  data=data+"@Sx"+parseInt(smallCircles[smallCircles.length-1].xx)+"y"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed\n";
+  for(i=0;i<smallCircles.length;i++){
+  data=data+"◤"+smallCircles[i].sh;
+  }
 
 d3.select(".mess").property("value", data);
 }
@@ -482,7 +491,7 @@ const pby=numbers[3];
 xx = pbx; 
 yy = pby;
 
-    pilaB.push({xx,yy});
+    pilaB.push({xx,yy,});
 }
 
  xx = numbers[0]; 
@@ -698,7 +707,7 @@ console.log(gtr);
 kotei=0;
 const str= gtr.slice(0, 2)//頭の二文字だけ使う
 const tst= gtr.slice(2)//頭の二文字とる
-//const Xi = str.substring(1);//数字だけとる
+
 
 
 
@@ -716,7 +725,54 @@ svg.append("circle")
   .style("fill", "white")
   .style("stroke", "green")
   .style("stroke-width", 2)
-   .attr("class","stk");
+   .attr("class","stk")
+     .on("click",function(){
+      svg.selectAll(".stk").remove();
+      kotei=-1;
+
+      //Kreisに色々追加
+      const sen = tst.substring(1);//数字だけとる
+      const sxx=smallCircles[sen].xx
+			const syy=smallCircles[sen].yy
+      console.log(tst,sxx,syy);
+
+const b1="#b"+sen;
+svg.select(b1)
+        .attr("x",sxx)
+        .attr("y", syy)
+        .attr("r", 90);
+
+const c1="#c"+sen;
+svg.select(c1)
+        .attr("stroke","none");
+
+const k1="#k1"+sen;
+svg.select(k1)
+        .attr("x",sxx-90)
+        .attr("y", syy+90)
+        .style("font-family", "Grmfont")//フォント
+        .style("font-size", "180px")//大きさ
+        .text("①")
+        .attr("fill", "green")
+          .attr("id","k1"+sen)
+         .attr("class","krs");
+  
+         smallCircles[sen].lv=1;
+
+const k2="#k2"+sen;
+svg.select(k2)
+        .attr("x",sxx-45)
+        .attr("y",syy+40)
+        .style("font-family", "Grmfont")//フォント
+        .style("font-size", "100px")//大きさ
+        .text(gr)
+        .attr("fill", "#00ff00")
+         .attr("id","k2"+sen)
+         .attr("class","krs");
+         smallCircles[sen].sh=str+currentValue;
+   
+         
+  });
   
 // 数字の描画
 
@@ -750,11 +806,13 @@ const handle = svg.append("circle")
    const x1 = 300 + radius * Math.cos(angle)*0.7;
    const y1 = 250 + radius * Math.sin(angle)*0.7;
    handle.attr("cx", x1).attr("cy", y1);
-   console.log(str+currentValue);
+      gt=Grm[str+currentValue]["mere"];
+ 		 svg.select("#"+tst).text("{"+gt+"◖");
+     
    gr=Grm[str+currentValue]["Gr3"];
    suji.text(gr);
-   gt=Grm[str+currentValue]["mere"];
- 		 svg.select("#"+tst).text(gt+"{");
+   
+
 
 });
 
@@ -797,16 +855,37 @@ document.addEventListener("wheel", function(event) {
 }
 
 function circleinit(){
-
-
-      
   for(k=0;k<12;k++){
-       const line = lineGroup.append("line")
-        .attr("id","l"+k) 
+//ミステル
+    const line = lineGroup.append("line")
+    .attr("id","l"+k);
+
+//後方魔法円
+    const BackCircle = g.append("circle")
+    .attr("id","b"+k)
+    .attr("fill", "#222")
+    .attr("class","krs");
+
+//satz LV    
+    const krs1=g.append("text")      
+    .style("font-family", "Grmfont")//フォント
+    .style("font-size", "180px")//大きさ
+    .attr("fill", "green")
+      .attr("id","k1"+k)
+     .attr("class","krs");
+//satz種類    
+     const krs2=g.append("text")       
+    .style("font-family", "Grmfont")//フォント
+    .style("font-size", "100px")//大きさ
+    .attr("fill", "#00ff00")
+     .attr("id","k2"+k)
+     .attr("class","krs");
+    
+//メイン魔法円
        const smallCircle = g.append("circle")
         .attr("id","c"+k)
         .attr("class","small")
-
+        .style("opacity",0.5)
 
         //ドラッグイベント
       .call(d3.drag()
@@ -815,8 +894,19 @@ function circleinit(){
           svg.selectAll(".ccc").remove();
           d3.select(this).attr("fill", "green").attr("cx", event.x).attr("cy", event.y);
           line.attr("x2", event.x).attr("y2", event.y);
-          const snos= "#s"+d3.select(this).attr("id");
-           console.log(snos);
+          
+         const idk=d3.select(this).attr("id");
+         const iid=  idk.substring(1);//数字だけとる
+         const k1= "#k1"+iid;
+         const k2= "#k2"+iid;
+         const b1= "#b"+iid;
+          svg.select(k1).attr("x",event.x-90).attr("y", event.y+90);
+          svg.select(k2).attr("x",event.x-45).attr("y", event.y+40);
+          svg.select(b1).attr("cx",event.x).attr("cy", event.y);
+          
+
+          const snos= "#s"+idk;
+
    				svg.select(snos).attr("x", event.x-20).attr("y", event.y+20).style("font-size", "50px").attr("fill", "Black");
           if(index>1){
            const cf=smallCircles[0];//魔法円最初
@@ -845,8 +935,10 @@ function circleinit(){
           const idS=d3.select(this).attr("r") -radiusB;
           xx=event.x;
           yy=event.y;
-          smallCircles.splice(idS,0);
-          smallCircles.splice(idS,1,{xx,yy});
+
+
+    smallCircles[idS].xx=xx;
+    smallCircles[idS].yy=yy;  
           
 //メーレ側の該当箇所を四角で囲む 
 if(ksng>0){
