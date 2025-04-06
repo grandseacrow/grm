@@ -1,5 +1,5 @@
 const me= "mære";//文字化け修正が面倒なので
-const Vr=0.99945;//ver修正を書き込みやすいように
+const Vr=0.9995;//ver修正を書き込みやすいように
 let jf=0;
 jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -313,7 +313,7 @@ if(smallCircles.length>0){
                 
 
                 pilaB.splice(idS,0);
-                pilaB.splice(idS,1,{xx,yy,lv,sh});
+                pilaB.splice(idS,1,{xx,yy});
       //        
       const cf=smallCircles[0];//魔法円最初
       const pf=pilaB[0];//pira最初
@@ -453,95 +453,37 @@ data0=[];
 data0 =data12.split("◤"); //data0[1]以降使用可能
 
 data1=data.split("@");  
-const str=data1[1];
+let countk=1
+let tkrr="";
+
+while(tkrr!="Ed"){
+const str=data1[countk];
+  console.log("kr:"+str);
 const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
+  xx = numbers[0]; 
+  yy = numbers[1];
 
-if(numbers.length>2){
-const ppx=numbers[2];
-const ppy=numbers[3];
-xx = ppx; 
-yy = ppy;
-console.log(xx,yy);
-pilaB.push({xx,yy});
+  addSmallCircles(flag,xx,yy)
+  const countk1=countk-1;
+  gr=data0[countk];
+  addkreis(countk1,xx,yy,gr);
+  gt=Grm[gr]["mere"];
+  svg.select("#t"+countk1).text("{"+gt+"◖");
+ 
+ if (data1.length>3)
+  {
+  xx = numbers[2]; 
+  yy = numbers[3];
+  pilaB.push({xx,yy});
+}
+    
+  countk++;
+ tkrr=data1[countk].slice(0, 2)
+ console.log(tkrr);
 }
 
-xx = numbers[0]; 
-yy = numbers[1];
-console.log(xx,yy);
-addSmallCircles(flag,xx,yy)    
-gr=data0[1];
-addkreis(0,xx,yy,gr);
+});
 
-
-//1個目円位置
-
-let datax=data1[1].replace('Sx','M ');
-datax=datax.replace('Px', ' S ');
-datax=datax.replace('x',' ');
-datax=datax.replace('y',' ');
-datax=datax.replace('y',' ');
-
-if(data1.length>2){
-for(i=2;i<data1.length-2;i++){
-const str=data1[i];
-
-const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
-
-
-if(numbers.length>2){
-
-const pbx=numbers[2];
-const pby=numbers[3];
-xx = pbx; 
-yy = pby;
-
-pilaB.push({xx,yy,});
-}
-
-xx = numbers[0]; 
-yy = numbers[1];
-
-
-addSmallCircles(flag,xx,yy)    
-gr=data0[i-1];
-addkreis(i-1,xx,yy,gr);
-
-data2=data2+data1[i];
-data2=data2.replace('Sx',' ');
-data2=data2.replace('Px',' ');
-data2=data2.replace('y',' ');
-data2=data2.replace('x',' ');
-
-}
-}
-
-if (data1.length>3){
-const str=data1[data1.length-2];
-const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
-xx = numbers[0]; 
-yy = numbers[1]; 
-
-
-data2=data2+data1[data1.length-2]
-data2=data2.replace('Sx',' ');
-data2=data2.replace('y',' ');
-
-addSmallCircles(flag,xx,yy)    
-gr=data0[data1.length-2];
-addkreis(data1.length-1,xx,yy,gr);
-
-}
-
-data2=data2.replace('Sx',' ');
-data2=data2.replace('y',' ');
-
-data2=datax+data2;
-path.attr("d", data2);
-d3.select(".mess").property("value", data2);
-
-}
-
-);
 
 function zenkes(){
 
@@ -555,6 +497,7 @@ Ccircle .attr("y", coy+10);
 kotei=-1;
 
 //その他全消去
+svg.selectAll(".krs").remove();
 svg.selectAll(".stk").remove();
 svg.selectAll(".bbb").remove();
 svg.selectAll(".ccc").remove();
@@ -741,7 +684,6 @@ svg.append("circle")
   const sen = tst.substring(1);//数字だけとる
   const sxx=smallCircles[sen].xx
   const syy=smallCircles[sen].yy
-  console.log(tst,sxx,syy);
 
 addkreis(sen,sxx,syy,str+currentValue);
 
@@ -860,6 +802,7 @@ const krs1=g.append("text")
     .attr("id","c"+k)
     .attr("class","small")
     .style("opacity",0.5)
+     .attr("class","krs")
 
     //ドラッグイベント
   .call(d3.drag()
@@ -959,37 +902,36 @@ svg.select(snos).attr("x", event.x).attr("y", event.y-radiusB-index-10).style("f
 function addkreis(para,x,y,z){
 const b1="#b"+para;
 svg.select(b1)
-    .attr("x",x)
-    .attr("y", y)
-    .attr("r", 90);
+    .attr("cx",x)
+    .attr("cy", y)
+    .attr("r", 90)
+     .attr("class","krs");
 
-const c1="#c"+para;
-svg.select(c1)
-    .attr("stroke","none");
+
 
 const k1="#k1"+para;
 svg.select(k1)
     .attr("x",x-90)
     .attr("y", y+90)
-    .style("font-family", "Grmfont")//フォント
-    .style("font-size", "180px")//大きさ
     .text("①")
-    .attr("fill", "green")
       .attr("id","k1"+para)
-     .attr("class","krs");
-
-     smallCircles[para].lv=1;
+    // smallCircles[para].lv=1;
 
 const k2="#k2"+para;
 const zz=Grm[z]["Gr3"];
+console.log("moji:"+zz);
 svg.select(k2)
     .attr("x",x-45)
     .attr("y",y+40)
-    .style("font-family", "Grmfont")//フォント
-    .style("font-size", "100px")//大きさ
     .text(zz)
-    .attr("fill", "#00ff00")
      .attr("id","k2"+para)
-     .attr("class","krs");
-     smallCircles[para].sh=z;
+  smallCircles[para].sh=z;
+  
+  const c1="#c"+para;
+svg.select(c1)
+    .attr("cx",x)
+    .attr("cy", y)
+    .attr("stroke","none")
+    .attr("class","krs");
+  
 }
