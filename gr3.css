@@ -2,8 +2,9 @@ body{
  background-color: #000;
  color: green;
 font-size: 15px;
+cursor:none;
 }
-
+ 
 .lines{
   stroke: green;
   stroke-width:2px;
@@ -17,12 +18,16 @@ font-size: 15px;
   font-family: "Grmfont";
 overflow-y: scroll;
 }
-div {
-width:1000px;
-padding:10px;
-margin:10px;
- background:#222200;
-color:#ffffff;
-border-radius: 10px;
-border:2px solid  green;
+
+/*独自のマウスカーソルを作成*/
+div#cursor{
+  top: -5px; /*座標調整*/
+  left: 2px; /*座標調整*/
+  width: 20px;
+  height: 40px;
+fill:none;
+stroke:none;
+background:url("pc.svg"); 
+	position: fixed;
+	z-index: 1000;
 }
