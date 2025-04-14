@@ -4,6 +4,10 @@ body{
 font-size: 15px;
 cursor:none;
 }
+
+button{
+cursor:none;
+}
  
 .lines{
   stroke: green;
