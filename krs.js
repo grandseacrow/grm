@@ -1,5 +1,5 @@
 const me= "mære";//文字化け修正が面倒なので
-const Vr=0.9096;//ver修正を書き込みやすいように
+const Vr=0.9099;//ver修正を書き込みやすいように
 
 // SVG 要素を追加
 const svg = d3.select("body").append("svg")
@@ -9,17 +9,19 @@ const svg = d3.select("body").append("svg")
 let fla=[0,0,0,0,0,0,0,0,0,0];
 let knsj=["壱","弐","参","肆","伍","陸","質","捌","玖","拾"];
 const nan=["Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ","Ⅵ","Ⅶ","Ⅷ","Ⅸ","Ⅹ","Ⅺ","Ⅻ"];
-
+let cl="";
 const dataset=[
-{id:0,x:100,y:150,sh:"＆"},
-{id:1,x:200,y:150,sh:"＆"},
-{id:2,x:500,y:150,sh:"＆"}
+{id:0,x:0,y:150,sh:"＆"},
+{id:1,x:100,y:150,sh:"＆"},
+{id:2,x:200,y:150,sh:"＆"}
 ];
 
 const pilaB=[
-{id:0,x:100,y:350},
-{id:1,x:600,y:150}
-];
+{id:0,x:100,y:50},
+{id:1,x:300,y:200}];
+
+
+const g = svg.append("g");
 
 // カーソル用のdivタグを取得してcursorに格納
 var cursor = document.getElementById('cursor'); 
@@ -28,9 +30,6 @@ var cursor = document.getElementById('cursor');
 document.addEventListener('mousemove', function (e) {
     cursor.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px)';
 });
-
-
-const g = svg.append("g");
 
  //中央魔法円
 const largeCircle=  g.append('g')
@@ -62,7 +61,41 @@ const zoom = d3.zoom()
   .scaleExtent([0.1, 10]) // ズームの範囲を設定
   .on("zoom", zoomed);
 
-
+    const drag = d3.drag()
+      .on("start", function(event, d) {
+        d3.select(this).raise().classed("dragging", true);
+        d3.select(this).select("circle.main").attr("fill","green");
+        cursor.style.transform ='scale(0)';
+      })
+      .on("drag", function(event, d) {
+        d.x = event.x;
+        d.y = event.y;
+        d3.select(this).attr("transform", `translate(${d.x},${d.y})`);
+      })
+      .on("end", function(event, d) {
+              d3.select(this).select("circle.main").attr("fill","black");
+        d3.select(this).classed("dragging", false);
+cursor.style.transform ='scale(1)';
+      });
+ 
+     const drag2 = d3.drag()
+      .on("start", function(event, d) {
+        d3.select(this).raise().classed("dragging", true);
+        d3.select(this).select("text.ID").attr("fill","green");
+        cursor.style.transform ='scale(0)';
+      })
+      .on("drag", function(event, d) {
+        d.x = event.x;
+        d.y = event.y;
+        d3.select(this).attr("transform", `translate(${d.x},${d.y})`);
+      })
+      .on("end", function(event, d) {
+              d3.select(this).select("text.ID").attr("fill","white");
+        d3.select(this).classed("dragging", false);
+cursor.style.transform ='scale(1)';
+      });
+      
+      
 circleinit();
 
 svg.call(zoom);
@@ -103,48 +136,20 @@ svg.append("text") //k1(Lv)
 .attr("fill", "Green")
 .text(me)
 
+
+
 function circleinit(){
 //Kreis
  const  Kreis= g.selectAll('.kris')
     .data(dataset)
     .enter()
     .append('g')
- .call(d3.drag()
-	 .on("drag", function (event,d) {
-
- d.x = event.x;
-  d.y = event.y;
-  Kreis.data(dataset).enter();
-   d3.select(this).select("circle.main")
-     .attr("fill","green");//ドラッグ中緑
-
-  
-   d3.select(this)
-     .attr("transform", function (d) {
-  console.log(dataset);
-  
-  
-//      if (fla[d.id]==1){
-  //     return "translate(" + [d.x,d.y] + ")";
-    //  }else{
-        const dx=d.x-event.x*0.9;
-        const dy=d.y-event.y*0.9;
-        return "translate(" + [dx,dy] + ")";
-        
-
-     // }
-    
-    
-   })
-})
-
- .on("end", function (d) {
- fla[d.id]=1;
-  d3.select(this).select("circle.main")
-  .attr("fill","black");
+    .attr("transform", d => `translate(${d.x},${d.y})`)
+     .call(drag);
+      
  
- })
-    )
+ 
+ 
 
 
   Kreis.append("circle")//後方魔法円
@@ -195,19 +200,9 @@ function circleinit(){
     .data(pilaB)
     .enter()
     .append('g')
-    .call(d3.drag()
-	 .on("drag", function (event,d) {
-   d3.select(this).attr("transform", function (d) {
-  console.log(dataset); 
-    d.x = event.x;
-  d.y = event.y;
-   
-        const dx=event.x-d.x*0.9;
-        const dy=event.y-d.y*0.9;
-  
-        return "translate(" + [dx,dy] + ")";
-})
-}));
+    .attr("transform", d => `translate(${d.x},${d.y})`)
+     .call(drag2);
+
   pilab.append("text") //ID   
    .style("font-size", "10px")//大きさ
    .attr("fill", "white")
