@@ -5,22 +5,26 @@ font-size: 15px;
 cursor:none;
 }
 
+p{
+ margin:0;
+ padding:2px;
+}
+
+p.sel{
+background-color:#ffffff;
+border-radius:5px;
+}
 button{
 cursor:none;
 }
  
-.lines{
-  stroke: green;
-  stroke-width:2px;
-}
-
 @font-face {
   font-family: "Grmfont";
   src: url("GRMfont.woff")  format('woff');
 }
 .myFontClass {
   font-family: "Grmfont";
-overflow-y: scroll;
+/*overflow-y: scroll;*/
 }
 
 /*独自のマウスカーソルを作成*/
