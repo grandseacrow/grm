@@ -30,8 +30,9 @@ const secondP = pElements.filter(function(d, i) {
  return i === dataset.length-1;
 });
 
-// 選択されたPに対して点滅
+    secondP.attr("class", "sel");
 
+// 選択されたPに対して点滅
 let opacity = 1;
   setInterval(() => {
     opacity = opacity === 1 ? 0.5 : 1;
