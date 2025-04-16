@@ -1,10 +1,8 @@
 const me= "mære";//文字化け修正が面倒なので
-const Vr=0.9099;//ver修正を書き込みやすいように
+const Vr=0.939;//ver修正を書き込みやすいように
 
 // SVG 要素を追加
-const svg = d3.select("body").append("svg")
-  .attr("width", 1200)
-  .attr("height",480);//縦サイズ縮小
+const svg = d3.select("svg");
   
 let fla=[0,0,0,0,0,0,0,0,0,0];
 let knsj=["壱","弐","参","肆","伍","陸","質","捌","玖","拾"];
@@ -13,8 +11,33 @@ let cl="";
 const dataset=[
 {id:0,x:0,y:150,sh:"＆"},
 {id:1,x:100,y:150,sh:"＆"},
-{id:2,x:200,y:150,sh:"＆"}
-];
+{id:2,x:200,y:150,sh:"＆"}]
+
+const container = d3.select("#container");
+
+// データの数だけP要素を作成し、Div要素に追加
+const paragraphs = container.selectAll("p") // 既存のP要素を選択 (最初は空)
+  .data(dataset)                         // データをバインド
+  .enter()                            // データに対応する新しい要素のプレースホルダーを作成
+  .append("p")  
+  .text(d => "◤"+nan[d.id]+"◖");
+
+// IDが "myDiv" のDiv要素の下にあるP要素をすべて選択
+const pElements = d3.select("#container").selectAll("p");
+
+// データ最後のP要素を選択 
+const secondP = pElements.filter(function(d, i) {
+ return i === dataset.length-1;
+});
+
+// 選択されたPに対して点滅
+
+let opacity = 1;
+  setInterval(() => {
+    opacity = opacity === 1 ? 0.5 : 1;
+    secondP.style("opacity", opacity);
+  }, 1000);
+
 
 const pilaB=[
 {id:0,x:100,y:50},
@@ -98,6 +121,8 @@ cursor.style.transform ='scale(1)';
       
 circleinit();
 
+
+
 svg.call(zoom);
 
 function zoomed(event) {
@@ -115,16 +140,6 @@ svg.append("text")
 .attr("fill", "Green")
 .text("gr3.js Ver"+Vr)
 
-//枠
-svg.append("rect")
-.attr("rx",20)
-.attr("x",620)
-.attr("y",20)
-.attr("width",400)
-.attr("height",450)
-.attr("stroke", "Green")
-.attr("stroke-width", 2)
-.attr("fill", "none")
 
 
 //mre(メーレ)
