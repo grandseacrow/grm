@@ -1,5 +1,5 @@
 const me= "mære";//文字化け修正が面倒なので
-const Vr=0.9995;//ver修正を書き込みやすいように
+const Vr=0.9996;//ver修正を書き込みやすいように
 let jf=0;
 jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -245,12 +245,15 @@ g.select("#c"+index)
 //番号付与
 const ind="sc"+index;
 console.log(ind);
+
+
    const sno = g.append("text")
    .attr("id",ind)
    .attr("fill", "green")
    .style("font-size", "10px")//大きさ
    .text(nan[index]);
-console.log(ind);
+
+
 if (flag==1){
 sno.attr("x", loadX)
   .attr("y", loadY-radiusB-index-10);
@@ -300,20 +303,13 @@ if(smallCircles.length>0){
                 .call(d3.drag().on("drag", function (event) {
                     d3.select(this).attr("x", event.x).attr("y", event.y);
                    const idS=d3.select(this).attr("width")-10-1;            
-                   
-                   
-
+                  
       
                  no.attr("x", event.x+12+idS).attr("y", event.y);
 
-                xx=event.x;
-                yy=event.y;
-                lv=0;
-                sh=0;
-                
-
-                pilaB.splice(idS,0);
-                pilaB.splice(idS,1,{xx,yy});
+                pilaB[idS].xx=event.x;
+                pilaB[idS].yy=event.y;
+        
       //        
       const cf=smallCircles[0];//魔法円最初
       const pf=pilaB[0];//pira最初
@@ -348,9 +344,9 @@ const pbb=pilaB[index-1];
 pila.attr("x",  pbb.xx)
   .attr("y",  pbb.yy);
   
-//  no.attr("x", pbb.xx+12+index-1)
-//      .attr("y", pbb.yy)
-//      .text(nan[index-1]);
+ no.attr("x", pbb.xx+12+index-1)
+     .attr("y", pbb.yy)
+     .text(index);
 
 }else{
 pila
@@ -359,7 +355,7 @@ pila
 
 no.attr("x", pbx+12+index)
   .attr("y", pby)
-   .text(nan[index-1]);
+   .text(index);
  xx=pbx;
 yy=pby;
 pilaB.push({xx,yy});
@@ -386,7 +382,7 @@ pilaB.push({xx,yy});
        
 //pila書き込み（直描き）
 
-if (index>0 && flag!=1){
+if (index>0){
      const cf=smallCircles[0];//魔法円最初
       const pf=pilaB[0];//pira最初
       let pilaW=`M${cf.xx} ${cf.yy} Q ${pf.xx} ${pf.yy}`;
@@ -686,6 +682,7 @@ svg.append("circle")
   const syy=smallCircles[sen].yy
 
 addkreis(sen,sxx,syy,str+currentValue);
+svg.selectAll("text").enter();
 
      
 });
