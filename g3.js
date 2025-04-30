@@ -1,5 +1,5 @@
 const me= "mære";//文字化け修正が面倒なので
-const Vr=0.9996;//ver修正を書き込みやすいように
+const Vr=0.99991;//ver修正を書き込みやすいように
 let jf=0;
 jf=5;//	jsfiddle-Grm本体間の誤差修正用(Fiddle以外は消す)
 
@@ -37,12 +37,13 @@ const Grm = {
 
 let outerRadius = 200;
 let smallCircles = [];
+let dataArray= [];
 let pilaB = [];
 let data0 =[];
 let data1=[];
 let data3=[];
 let satzK=[];
-
+let idc=0;
 let fsgg="";
 let gr=""
 let gt="";
@@ -61,11 +62,59 @@ let selectS=0;
 let flag=0;
 
 
+// カーソル用のdivタグを取得してcursorに格納
+var cursor = document.getElementById('cursor'); 
 
-// SVG 要素を追加
-const svg = d3.select("body").append("svg")
-  .attr("width", 1200)
-  .attr("height",480);//縦サイズ縮小
+// カーソル用のdivタグをマウスに追従させる
+document.addEventListener('mousemove', function (e) {
+    cursor.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px)';
+});
+
+const container = d3.select("#container");
+// グループ要素 SVG 要素を追加
+const svg = d3.select("svg");
+const g = svg.append("g");
+
+// グリム＠　クリック処理
+
+const gr3p=d3.select("#clicks")
+.on("click", addcircle);
+
+     const drag = d3.drag()
+           .on("start", function(event, d) {
+            d3.select(this).raise().classed("dragging", true);
+            d3.select(this).select("circle.main").attr("fill","green");
+            cursor.style.transform ='scale(0)';
+           })
+           .on("drag", function(event, d) {
+               d.x += event.dx;
+               d.y += event.dy;
+               d3.select(this).attr("transform", `translate(${d.x},${d.y})`);
+               const la ="#l"+d.id;
+               console.log(la);
+               svg.select(la)
+               .attr("x1", centerX-d.x)
+               .attr("y1", centerX-d.y)
+               .attr("transform", `translate(${d.x},${d.y})`);
+
+           })
+           .on("end", function(event, d) {
+            d3.select(this).select("circle.main").attr("fill","black");
+            d3.select(this).classed("dragging", false);
+    cursor.style.transform ='scale(1)';
+           });
+
+
+// グリム＠
+let opacity = 1;
+  setInterval(() => {
+    opacity = opacity === 1 ? 0.5 : 1;
+    gr3p.style("opacity", opacity);
+  }, 1000);
+
+
+ // .attr("width", 1200)
+ // .attr("height",480);//縦サイズ縮小
   
 //Gr3.jsバージョン表示
 D3SVG2(svg,0,450,460,"gr3.js Ver"+Vr,Ctable,1);
@@ -75,12 +124,11 @@ const zoom = d3.zoom()
   .scaleExtent([0.1, 10]) // ズームの範囲を設定
   .on("zoom", zoomed);
 
-// グループ要素を追加
-const g = svg.append("g");
+
 
 // 線のグループ要素（ノードを円の奥に配置）
 const lineGroup = g.append("g")
-  .lower();
+
  
 // メイン魔法円を描画
 const largeCircle = D3SVG2(g,1,250,250,200,Ctable,4,1,2);
@@ -109,58 +157,16 @@ const MOYO= g.append("use")
 
 
 
-
-//枠
-
-D3SVG4(svg,1,620,20,1020,470,Ctable,0,1,2,20);
-
 //mre(メーレ)
-D3SVG2(svg,0,640,15,me,Ctable,1);
+D3SVG2(svg,0,600,15,me,Ctable,1);
 
 
 
-
-//メーレ表示（テスト用）
-let mW="グリム";
-svg.append("text")
-.attr("x", 640)
-.attr("y", coy+5)
-.style("font-family", "Grmfont")//フォント
-.style("font-size", "20px")//大きさ
-.text(mW)
-.attr("fill", "green"); // クラスを追加
-
-//魔法円　初期化
-circleinit();
-
-//■カーソル（初期）
-
-
-  const Ccircle = svg.append("rect")
-    .attr("x", 630)
-    .attr("y", coy+10)
-    .attr("rx",5)
-    .attr("ry",5)
-    .attr("width", cow)
-    .attr("height",10)                   
-    .attr("fill", "green")
-    .on("click", addSmallCircles);
-
-// 点滅アニメーション
-
-  let opacity = 1;
-  setInterval(() => {
-    opacity = opacity === 1 ? 0.5 : 1;
-    Ccircle.style("opacity", opacity);
-  }, 1000);
 
 
 
 // ズーム動作をグループ要素に適用
 svg.call(zoom);
-
-
-
 
 // ズームイベントの処理
 function zoomed(event) {
@@ -426,7 +432,7 @@ data=data+"@Sx"+parseInt(smallCircles[i].xx) +"y"+parseInt(smallCircles[i].yy);
 data=data+"Px"+parseInt(pilaB[i].xx) +"y"+parseInt(pilaB[i].yy)+` `;
 }
 
-data=data+"@Sx"+parseInt(smallCircles[smallCircles.length-1].xx)+"y"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Ed\n";
+data=data+"@Sx"+parseInt(smallCircles[smallCircles.length-1].xx)+"y"+parseInt(smallCircles[smallCircles.length-1].yy)+"@Edn";
 for(i=0;i<smallCircles.length;i++){
 data=data+"◤"+smallCircles[i].sh;
 }
@@ -443,7 +449,7 @@ flag=1;
 const data=d3.select(".mess").property("value");
 //@で分割
 let data2="";
-data0=data.split("\n"); 
+data0=data.split("n"); 
 const data12=data0[1];
 data0=[];
 data0 =data12.split("◤"); //data0[1]以降使用可能
@@ -455,7 +461,7 @@ let tkrr="";
 while(tkrr!="Ed"){
 const str=data1[countk];
   console.log("kr:"+str);
-const numbers = str.match(/\d+/g); // 数字の連続をすべて抽出
+const numbers = str.match(/d+/g); // 数字の連続をすべて抽出
   xx = numbers[0]; 
   yy = numbers[1];
 
@@ -932,3 +938,128 @@ svg.select(c1)
     .attr("class","krs");
   
 }
+
+
+
+
+function updateChart() {
+
+//ミステル 配置
+  const line=lineGroup.append("line").lower()
+  .attr("id","l"+idc)
+
+  .attr("x2", x)
+  .attr("y2", y)
+
+  .attr("x1", centerX-x)
+  .attr("y1", centerX-y)
+  .attr("stroke", "green")      
+  .attr("stroke-width", 20)  
+  .attr("transform", `translate(${x},${y})`);
+
+
+
+//クライス配置
+
+  const groups = g.selectAll("g.draggable")
+        .data(dataArray);
+
+    const Kreis = groups.enter()
+        .append("g")
+        .attr("class", "draggable")
+        .attr("transform", d => `translate(${d.x},${d.y})`)
+        .call(drag);
+
+    
+        Kreis.append("circle")//後方魔法円
+        .attr("fill", "#222")
+        .attr("class","b")
+        .attr("cx",d=> d.x)
+        .attr("cy",d=> d.y)
+      
+    
+      
+      Kreis.append("text") //k1(Lv)
+        .style("font-family", "Grmfont")//フォント
+      .style("font-size", "180px")//大きさ
+        .attr("fill", "green")
+        .attr("x",d=> d.x-90)
+        .attr("y",d=> d.y+90)
+        .text("①")
+      .attr("class","k1");
+      
+      Kreis.append("text") //k2（ｓｈ）   
+      .style("font-family", "Grmfont")//フォント
+      .style("font-size", "100px")//大きさ
+      .attr("fill", "#00ff00")
+        .text(d=> d.sh)
+        .attr("x",d=> d.x-45)
+        .attr("y",d=> d.y+40)
+      .attr("class","k2");
+      
+      Kreis.append("circle")//メイン魔法円
+          .style("opacity",0.5)
+          .attr("fill","black")
+          .attr("class","main") 
+        .attr("cx",d=> d.x)
+        .attr("cy",d=> d.y)
+        .attr("r",90)
+        
+      Kreis.append("text") //ID   
+      .style("font-size", "16px")//大きさ
+      .attr("fill", "#00ff00")
+        .text(d=> nan[d.id])
+        .attr("x",d=> d.x)
+        .attr("y",d=> d.y-100)
+      .attr("class","ID");    
+
+      groups.attr("transform", d => `translate(${d.x},${d.y})`);
+
+
+
+    groups.exit().remove();
+
+
+ 
+
+
+           idc++;
+
+
+           container.selectAll("p") // 既存のP要素を選択 (最初は空)
+           .data(dataArray)                         // データをバインド
+           .enter()                            // データに対応する新しい要素のプレースホルダーを作成
+           .append("p")  
+           .text(d => "◤"+nan[d.id]+"◖");
+
+
+   
+       }
+
+       function addcircle() {
+        const maxOuterCircles = 6;
+
+        if( z == 5){
+            z=0;
+            outerRadius = outerRadius + 100 ;
+            }else{
+            z++;
+    }
+    
+        
+      const angle = Math.PI * (dataArray.length / maxOuterCircles)*2;    
+      x = outerRadius * Math.cos(angle)*0.8+125;
+      y = outerRadius * Math.sin(angle)*0.8+125;
+
+           const id= idc;
+           const sh=""
+           dataArray.push({id,x, y ,sh });
+
+
+          updateChart();
+
+
+       }
+
+     
+
